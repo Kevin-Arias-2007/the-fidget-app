@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Fidget App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <!-- VISTA 1: BIENVENIDA -->
+    <div id="view-welcome" class="view">
+        <header>
+            <div class="logo"><div class="logo-icon">F</div>Fidget</div>
+            <div class="nav-actions">
+                <button class="btn-outline" onclick="showLoginView('login')">Iniciar sesión</button>
+                <button class="btn-solid" onclick="showLoginView('register')">Crear cuenta</button>
+            </div>
+        </header>
+        <main class="welcome-main">
+            <div class="text-content">
+                <span class="eyebrow">Un momento solo para ti</span>
+                <h1>Le damos la<br><span class="serif-italic">Bienvenida.</span></h1>
+                <p class="description">Un espacio digital tranquilo para jugar, respirar y encontrar tu propio ritmo.</p>
+                <div class="cta-group">
+                    <button class="btn-main" onclick="showLoginView()">Comenzar con calma <span>&rarr;</span></button>
+                    <button class="btn-secondary" onclick="showAppTab('dashboard')">Explorar sin cuenta</button>
+                </div>
+            </div>
+            <div class="graphic-container">
+                <div class="ring ring-1"></div><div class="ring ring-2"></div>
+                <div class="floating-label label-respira">Respira</div>
+                <div class="floating-label label-ritmo">A tu ritmo</div>
+                <div class="windmill-shape">
+                    <div class="blade blade-1"></div><div class="blade blade-2"></div><div class="blade blade-3"></div><div class="windmill-center"></div>
+                </div>
+            </div>
+        </main>
+        <section class="lp-section" aria-labelledby="lp-tools-heading">
+            <div class="lp-section-head">
+                <span class="eyebrow">HERRAMIENTAS DE AUTORREGULACIÓN</span>
+                <h2 id="lp-tools-heading">Diseñado para calmar sin saturar</h2>
+                <p>Un espacio centralizado creado para estudiantes y jóvenes con TDAH, TEA o ansiedad, sin menús complejos ni estímulos invasivos.</p>
+            </div>
+            <div class="lp-cards-grid">
+                <article class="lp-feature-card">
+                    <span class="lp-pill">Táctil y Visual</span>
+                    <h3>Fidgets interactivos</h3>
+                    <p>Spinner con inercia, Pop-it de 36 burbujas, Cubo táctil, Ondas, Geométrico y Dibujo libre sin puntajes ni presión.</p>
+                </article>
+                <article class="lp-feature-card">
+                    <span class="lp-pill">Apoyo Inmediato</span>
+                    <h3>Botón S.O.S y Anclaje</h3>
+                    <p>Acceso en un toque a respiración guiada, técnica 5-4-3-2-1, aislamiento auditivo con ruido blanco y contacto de confianza.</p>
+                </article>
+                <article class="lp-feature-card">
+                    <span class="lp-pill">Accesibilidad Real</span>
+                    <h3>Adaptado a tu ritmo</h3>
+                    <p>Check-in emocional diario, modo oscuro de bajo contraste, fuente de lectura fácil, modo solo texto y Focus Mode.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="lp-section" style="padding-top: 10px;">
+            <div class="lp-cta-banner">
+                <div>
+                    <span class="eyebrow" style="margin-bottom: 10px;">PRIVADO POR DISEÑO</span>
+                    <h2 style="font-size: 28px; font-weight: 500; margin-bottom: 8px;">Empieza tu pausa hoy</h2>
+                    <p style="color: var(--text-muted); font-size: 14px;">Tus registros y preferencias se guardan localmente en tu dispositivo.</p>
+                </div>
+                <div class="cta-group">
+                    <button class="btn-main" onclick="showLoginView('register')">Crear cuenta gratis <span>&rarr;</span></button>
+                    <button class="btn-secondary" onclick="showAppTab('dashboard')">Probar herramientas</button>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <div class="copyright">Hecho con cuidado en Perú</div>
+            <div class="footer-links"><span onclick="openPrivacyModal()">Privacidad</span><span onclick="showLoginView('login')">Accesibilidad</span><span onclick="showLoginView('login')">Ayuda</span></div>
+        </footer>
+    </div>
+
+    <!-- VISTA 2: LOGIN Y REGISTRO -->
+    <div id="view-login" class="view hidden">
+        <div class="login-left">
+            <div class="logo"><div class="logo-icon">F</div>Fidget</div>
+            <div class="text-content">
+                <span class="eyebrow">TU ESPACIO, TU RITMO</span>
+                <h1>Un lugar tranquilo<br>para volver a ti.</h1>
+                <p style="color: var(--text-muted);">Herramientas sencillas para regular, respirar y continuar.</p>
+            </div>
+            <div class="privacy-note">Privado por diseño. Tus datos se guardan en este dispositivo.</div>
+        </div>
+        <div class="login-right">
+            <div class="form-container">
+                <button type="button" class="btn-back" onclick="showWelcomeView()">&larr; Volver</button>
+
+                <!-- FORMULARIO INICIAR SESIÓN (HU-007) -->
+                <div id="auth-login-box">
+                    <span class="form-eyebrow">BIENVENIDA DE NUEVO</span>
+                    <h2>Inicia sesión</h2>
+                    <p class="form-subtitle">Usa tu cuenta registrada o la cuenta demo (valeria@fidget.pe / 12345678).</p>
+                    <div id="login-alert" class="auth-alert" role="alert"></div>
+
+                    <form onsubmit="handleLoginSubmit(event)" novalidate>
+                        <div class="input-group">
+                            <label for="login-email">Correo electrónico</label>
+                            <input type="email" id="login-email" placeholder="valeria@fidget.pe" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="login-password">Contraseña</label>
+                            <div class="input-wrapper">
+                                <input type="password" id="login-password" placeholder="Tu contraseña" required>
+                                <button type="button" class="btn-show-pass" onclick="togglePassVisibility('login-password', this)">Mostrar</button>
+                            </div>
+                        </div>
+                        <div class="form-options">
+                            <label class="checkbox-wrapper"><input type="checkbox" id="login-remember" checked> Recordarme</label>
+                            <a href="#" class="link-blue" onclick="event.preventDefault(); openRecoveryModal()">Olvidé mi contraseña</a>
+                        </div>
+                        <button type="submit" class="btn-submit">Entrar a mi espacio</button>
+                        <div class="divider"><span>o continúa con</span></div>
+                        <div class="social-login">
+                            <button type="button" class="btn-social" onclick="loginWithDemoAccount()">G Google</button>
+                            <button type="button" class="btn-social" onclick="loginWithDemoAccount()">Apple</button>
+                        </div>
+                        <div class="register-prompt">¿Aún no tienes cuenta? <a href="#" class="link-blue" onclick="event.preventDefault(); switchAuthMode('register')">Crear una</a></div>
+                    </form>
+                </div>
+
+                <!-- FORMULARIO CREAR CUENTA (HU-006 + HU-024) -->
+                <div id="auth-register-box" style="display: none;">
+                    <span class="form-eyebrow">EMPIEZA CON CALMA</span>
+                    <h2>Crear cuenta</h2>
+                    <p class="form-subtitle">Crea tu espacio personal. Tus datos se guardan localmente en este dispositivo.</p>
+                    <div id="register-alert" class="auth-alert" role="alert"></div>
+
+                    <form onsubmit="handleRegisterSubmit(event)" novalidate>
+                        <div class="input-group">
+                            <label for="reg-name">Nombre completo *</label>
+                            <input type="text" id="reg-name" placeholder="Ej. Valeria Quispe" required>
+                            <span id="err-reg-name" class="field-error-text">El nombre es obligatorio.</span>
+                        </div>
+                        <div class="input-group">
+                            <label for="reg-email">Correo electrónico *</label>
+                            <input type="email" id="reg-email" placeholder="valeria@correo.pe" required>
+                            <span id="err-reg-email" class="field-error-text">Ingrese un correo válido.</span>
+                        </div>
+                        <div class="input-group">
+                            <label for="reg-password">Contraseña (mínimo 8 caracteres) *</label>
+                            <div class="input-wrapper">
+                                <input type="password" id="reg-password" placeholder="Mínimo 8 caracteres" required>
+                                <button type="button" class="btn-show-pass" onclick="togglePassVisibility('reg-password', this)">Mostrar</button>
+                            </div>
+                            <span id="err-reg-password" class="field-error-text">La contraseña debe tener al menos 8 caracteres.</span>
+                        </div>
+                        <label class="privacy-check-row" for="reg-privacy-check">
+                            <input type="checkbox" id="reg-privacy-check">
+                            <span>He leído y acepto las <a href="#" class="link-blue" onclick="event.preventDefault(); openPrivacyModal()">Políticas de Privacidad</a>.</span>
+                        </label>
+                        <button type="submit" class="btn-submit">Crear cuenta</button>
+                        <div class="register-prompt">¿Ya tienes cuenta? <a href="#" class="link-blue" onclick="event.preventDefault(); switchAuthMode('login')">Inicia sesión</a></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VISTA 3: APP INTERNA -->
+    <div id="view-app" class="view hidden">
+        <div id="sidebar-backdrop" class="sidebar-backdrop" onclick="toggleMobileSidebar(false)"></div>
+        <aside class="sidebar" id="app-sidebar" aria-label="Navegación principal">
+            <div class="sidebar-header">
+                <a href="#" class="sidebar-logo" onclick="showWelcomeView()"><div class="logo-icon" style="margin-right: 8px;">F</div> Fidget</a>
+            </div>
+
+            <div class="menu-section" style="margin-bottom: 10px;">
+                <a href="#" class="menu-item active" data-tab="dashboard" onclick="showAppTab('dashboard')"><i data-lucide="home"></i> Inicio</a>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-title">Fidget Toys</div>
+                <a href="#" class="menu-item" data-tab="favorites" onclick="showAppTab('favorites')"><i data-lucide="heart"></i> Favoritos</a>
+                <a href="#" class="menu-item" data-tab="all" onclick="showAppTab('all')"><i data-lucide="layout-grid"></i> Todos los Fidgets</a>
+                <a href="#" class="menu-item" data-tab="calm-games" onclick="showAppTab('calm-games')"><i data-lucide="smile"></i> Calm Games</a>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-title">Mi Bienestar</div>
+                <a href="#" class="menu-item" data-tab="checkin" onclick="showAppTab('checkin')"><i data-lucide="smile"></i> Check-in emocional</a>
+                <a href="#" class="menu-item" data-tab="grounding" onclick="showAppTab('grounding')"><i data-lucide="compass"></i> Anclaje 5-4-3-2-1</a>
+                <a href="#" class="menu-item" data-tab="history" onclick="showAppTab('history')"><i data-lucide="clock"></i> Historial</a>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-title">Ayuda</div>
+                <a href="#" class="menu-item" data-tab="emergency-contacts" onclick="showAppTab('emergency-contacts')"><i data-lucide="phone-call"></i> Contactos de emergencia</a>
+                <a href="#" class="menu-item" data-tab="articles" onclick="showAppTab('articles')"><i data-lucide="book-open"></i> Artículos</a>
+            </div> 
+
+            <div class="menu-section">
+                <div class="menu-title">Extras</div>
+                <a href="#" class="menu-item" data-tab="focus" onclick="showAppTab('focus')"><i data-lucide="timer"></i> Focus Mode</a>
+                <a href="#" class="menu-item" data-tab="music" onclick="showAppTab('music')"><i data-lucide="music"></i> Músicas</a>
+                <a href="#" class="menu-item" data-tab="breathe" onclick="showAppTab('breathe')"><i data-lucide="wind"></i> Breathe</a>
+            </div>
+
+            <div class="sidebar-footer" id="sidebar-user-btn" onclick="showAppTab('settings')">
+                <div class="user-avatar" id="sidebar-user-avatar">VQ</div>
+                <div class="user-info">
+                    <span class="user-name" id="sidebar-user-name">Valeria Quispe</span>
+                    <span class="user-email" id="sidebar-user-email">valeria@fidget.pe</span>
+                </div>
+                <i data-lucide="chevron-right" class="chevron-right"></i>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="topbar">
+                <div class="topbar-left">
+                    <button type="button" class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="app-sidebar">
+                        <i data-lucide="menu" style="width: 18px; height: 18px;"></i>
+                    </button>
+                </div>
+                <div class="topbar-center">
+                    <i data-lucide="info" style="width: 16px; height: 16px; color: var(--text-muted-dark);"></i>
+                    <span id="topbar-title-text">Inicio</span>
+                </div>
+                <div class="topbar-right">
+                    <button class="btn-sos" onclick="openSosView()"><i data-lucide="alert-circle" style="width: 14px; height: 14px;"></i> S.O.S</button>
+                    <button class="btn-audio" onclick="showAppTab('music')"><i data-lucide="volume-2" style="width: 14px; height: 14px;"></i> Sonido</button>
+                </div>
+            </div>
+
+            <div class="content-scroll" id="app-content-scroll">
+
+                <!-- TAB: INICIO -->
+                <div id="tab-dashboard" class="app-tab">
+                    <div class="hero-card">
+                        <div class="hero-text">
+                            <span class="eyebrow">UN MOMENTO PARA EXPLORAR</span>
+                            <h2>Una vuelta.<br><span class="serif-italic">Una pausa.</span></h2>
+                            <p>Deja que el movimiento te acompañe. Sin objetivos, sin prisa: solo un momento para ti.</p>
+                           <button class="btn-action" onclick="openSpinnerView()">Abrir Spinner ↗</button>
+                        </div>
+                        <div class="hero-graphic">
+                            <div class="ring ring-1"></div><div class="ring ring-2"></div>
+                            <div class="windmill-shape">
+                                <div class="blade blade-1" style="background:#1359a1"></div>
+                                <div class="blade blade-2" style="background:#1359a1"></div>
+                                <div class="blade blade-3" style="background:#1359a1"></div>
+                                <div class="windmill-center" style="border-color:#b3d4ff"></div>
+                            </div>
+                            <span class="graphic-label">ARRASTRA PARA GIRAR</span>
+                        </div>
+                    </div>
+
+                    <div class="checkin-card" id="dashboard-quick-checkin">
+                    <div class="checkin-text"><span class="eyebrow">CHECK-IN RÁPIDO</span><h3>¿Cómo estás en este momento?</h3></div>
+                    <div class="mood-selector">
+                        <div class="mood-option" onclick="handleQuickCheckin('Muy difícil', 'ci-mood-1')"><div class="mood-circle mood-1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 16 Q 12 11 17 16" /></svg></div><span class="mood-label">Muy bajo</span></div>
+                        <div class="mood-option" onclick="handleQuickCheckin('Difícil', 'ci-mood-2')"><div class="mood-circle mood-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M8 15 Q 12 12 16 15" /></svg></div><span class="mood-label">Bajo</span></div>
+                        <div class="mood-option" onclick="handleQuickCheckin('Neutral', 'ci-mood-3')"><div class="mood-circle mood-3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 14 L 17 14" /></svg></div><span class="mood-label">Neutral</span></div>
+                        <div class="mood-option" onclick="handleQuickCheckin('Bien', 'ci-mood-4')"><div class="mood-circle mood-4"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M8 13 Q 12 16 16 13" /></svg></div><span class="mood-label">Bien</span></div>
+                        <div class="mood-option" onclick="handleQuickCheckin('Muy bien', 'ci-mood-5')"><div class="mood-circle mood-5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 12 Q 12 17 17 12" /></svg></div><span class="mood-label">Muy bien</span></div>
+                    </div>
+                </div>
+                <div id="dashboard-checkin-done" class="checkin-card" style="display: none; padding: 18px 28px;">
+                    <div style="font-size: 14px; color: var(--text-dark);">Tu registro diario de hoy ya fue guardado.</div>
+                    <button type="button" class="settings-btn-outline" style="font-size: 13px; padding: 8px 14px;" onclick="showAppTab('history')">Ver en Historial</button>
+                </div>
+
+                    <div class="section-header">
+                        <div>
+                            <span class="eyebrow" style="color: var(--primary-blue); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; display: block; margin-bottom: 8px;">PARA CONTINUAR</span>
+                            <h2>Elige lo que necesitas ahora</h2>
+                        </div>
+                    </div>
+
+                    <div class="fidget-grid">
+                        <div class="fidget-card">
+                            <div class="fc-image cube"><div class="fc-heart"><i data-lucide="heart" style="color: var(--text-dark);"></i></div><div class="drawing-cube"><div style="background: #2D6EFF;"></div><div style="background: #4784c4;"></div><div style="background: #235889;"></div><div style="background: #8ab6a7;"></div></div></div>
+                            <div class="fc-content"><span class="fc-eyebrow">APRETAR</span><h4 class="fc-title">Cubo táctil</h4><p class="fc-desc">Botones, interruptores, dial y joystick en un solo espacio.</p><a href="#" class="fc-link">Abrir herramienta &rarr;</a></div>
+                        </div>
+                        <div class="fidget-card">
+                            <div class="fc-image popit"><div class="fc-heart"><i data-lucide="heart" style="color: #d93025; fill: #d93025;"></i></div><div class="drawing-popit"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
+                            <div class="fc-content"><span class="fc-eyebrow">APRETAR</span><h4 class="fc-title">Pop-it suave</h4><p class="fc-desc">Presiona burbujas a tu ritmo, sin prisa.</p><a href="#" class="fc-link">Abrir herramienta &rarr;</a></div>
+                        </div>
+                        <div class="fidget-card">
+                            <div class="fc-image ondas"><div class="fc-heart"><i data-lucide="heart" style="color: var(--text-dark);"></i></div><div class="drawing-ondas"><div><div></div></div></div></div>
+                            <div class="fc-content"><span class="fc-eyebrow">APRETAR</span><h4 class="fc-title">Ondas</h4><p class="fc-desc">Crea ondas calmadas con cada toque o movimiento.</p><a href="#" class="fc-link">Abrir herramienta &rarr;</a></div>
+                        </div>
+                    </div>
+
+                    <div class="widget-grid">
+                        <div class="widget-card">
+                            <span class="eyebrow">HOY</span>
+                            <div class="metric-num-val" style="font-size: 46px; font-weight: 300; color: var(--text-dark); display: flex; align-items: baseline; gap: 8px; margin-bottom: 20px; letter-spacing: -1px;">12 <span style="font-size: 13px; color: var(--text-muted-dark); font-weight: 400; letter-spacing: 0;">minutos de calma</span></div>
+                            <div class="qualitative-note">Tómate tu tiempo, vas a tu propio ritmo.</div>
+                            <div class="metric-num-val" style="height: 3px; background: #e5e5e5; border-radius: 2px; overflow: hidden; display: flex;"><div style="width: 40%; height: 100%; background: var(--primary-blue);"></div></div>
+                        </div>
+                        <div class="widget-card blue">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <span class="quote-icon" style="margin-bottom: 0;">“</span>
+                                <button type="button" onclick="refreshMotivationQuote()" style="background: rgba(255,255,255,0.18); border: none; color: #ffffff; border-radius: 8px; padding: 5px 10px; font-size: 12px; cursor: pointer;">Refrescar</button>
+                            </div>
+                            <p id="dashboard-quote-text" style="font-size: 18px; font-weight: 500; line-height: 1.4; margin-bottom: 8px; letter-spacing: -0.3px;">Tu ritmo también es una forma de avanzar.</p>
+                            <a href="#" onclick="event.preventDefault(); showAppTab('breathe')" style="color: white; font-size: 14px; text-decoration: underline; font-weight: 400;">Tomar una pausa</a>
+                        </div>
+                        <div class="widget-card">
+                            <span class="eyebrow">RECOMENDADO</span>
+                            <h4 style="font-size: 16px; font-weight: 400; color: var(--text-dark); margin-bottom: 6px;">Respiración 4-4-6</h4>
+                            <p style="font-size: 14px; color: var(--text-muted-dark); margin-bottom: 20px;">Una guía suave de 3 minutos.</p>
+                           <button onclick="showAppTab('breathe')" style="padding: 10px 18px; background: var(--bg-white); border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--text-dark); cursor: pointer; align-self: flex-start; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">Comenzar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: FAVORITOS -->
+                <div id="tab-favorites" class="app-tab hidden">
+                    <div class="page-header" style="margin-bottom: 40px;">
+                        <span class="eyebrow">EXPLORA A TU MANERA</span>
+                        <h1>Tus favoritos</h1>
+                        <p>Encuentra una textura, un movimiento o una nueva forma de jugar.</p>
+                    </div>
+                    <div class="toolbar">
+                        <div class="search-bar"><i data-lucide="search"></i><input type="text" placeholder="Busca por nombre o sensación..."><div class="shortcut-key"><i data-lucide="command"></i> K</div></div>
+                        <button class="btn-filters">Más filtros</button>
+                    </div>
+                    <div class="filter-tags">
+                        <div class="tag-group"><button class="filter-tag active">Todos</button><button class="filter-tag">Apretar</button><button class="filter-tag">Estirar</button><button class="filter-tag">Exclusivos</button><button class="filter-tag">Rotatorios</button></div>
+                        <div class="sort-dropdown">Ordenar <select class="sort-select"><option>A-Z</option><option>Z-A</option></select></div>
+                    </div>
+                    <div class="recent-layout">
+                        <div class="list-container">
+                            <div class="list-header">2 fidgets para explorar</div>
+                            <div class="grid-2-cols">
+                                <div class="list-card inactive">
+                                    <div class="fc-image popit"><div class="fc-heart"><i data-lucide="heart" style="color: #d93025; fill: #d93025;"></i></div><div class="drawing-popit"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
+                                    <div class="fc-content"><span class="fc-eyebrow">APRETAR</span><h4 class="fc-title">Pop-it suave</h4><p class="fc-desc">Presiona burbujas a tu ritmo, sin prisa.</p><a href="#" class="fc-link">Abrir &rarr;</a></div>
+                                </div>
+                                <div class="list-card">
+                                    <div class="fc-image spinner-bg"><div class="fc-heart"><i data-lucide="heart" style="color: #d93025; fill: #d93025;"></i></div><div class="windmill-shape"><div class="blade blade-1" style="background:#4B96F3"></div><div class="blade blade-2" style="background:#4B96F3"></div><div class="blade blade-3" style="background:#4B96F3"></div><div class="windmill-center" style="border-color:#e6f2ff; background: #e6f2ff;"></div></div></div>
+                                    <div class="fc-content"><span class="fc-eyebrow">ROTATORIOS</span><h4 class="fc-title">Spinner</h4><p class="fc-desc">Gira, observa y deja que el movimiento encuentre su ritmo.</p><a href="#" class="fc-link">Abrir &rarr;</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="preview-panel">
+                            <span class="preview-eyebrow">VISTA PREVIA</span>
+                            <div class="preview-image"><div class="windmill-shape"><div class="blade blade-1" style="background:#4B96F3"></div><div class="blade blade-2" style="background:#4B96F3"></div><div class="blade blade-3" style="background:#4B96F3"></div><div class="windmill-center" style="border-color:#e6f2ff; background: #e6f2ff;"></div></div></div>
+                            <span class="fc-eyebrow" style="margin-bottom: 8px;">ROTATORIOS</span><h3 class="preview-title">Spinner</h3><p class="preview-desc">Gira, observa y deja que el movimiento encuentre su ritmo.</p>
+                            <ul class="preview-features"><li>Sin objetivos ni presión</li><li>Funciona con mouse y tacto</li><li>Sonido opcional</li></ul>
+                            <button class="preview-btn">Abrir Spinner ↗</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: TODOS LOS FIDGETS -->
+                <div id="tab-all" class="app-tab hidden">
+                    <div class="page-header" style="margin-bottom: 25px;">
+                        <span class="eyebrow">EXPLORA A TU MANERA</span>
+                        <h1>Todos los Fidgets</h1>
+                        <p>Encuentra una textura, un movimiento o una nueva forma de jugar.</p>
+                    </div>
+                    <div class="shortcut-grid">
+                        <div class="shortcut-card" onclick="showAppTab('favorites')"><div class="shortcut-icon"><i data-lucide="heart"></i></div><div class="shortcut-text"><h4 class="shortcut-title">Mis favoritos</h4><p class="shortcut-desc">2 guardados</p></div><i data-lucide="chevron-right" style="color: #a3a3a3; width: 16px;"></i></div>
+                        <div class="shortcut-card" onclick="showAppTab('history')"><div class="shortcut-icon"><i data-lucide="clock"></i></div><div class="shortcut-text"><h4 class="shortcut-title">Historial</h4><p class="shortcut-desc">Registros emocionales</p></div><i data-lucide="chevron-right" style="color: #a3a3a3; width: 16px;"></i></div>
+                        <div class="shortcut-card" onclick="showAppTab('calm-games'); showToast('Mostrando herramientas recomendadas')"><div class="shortcut-icon"><i data-lucide="user"></i></div><div class="shortcut-text"><h4 class="shortcut-title">Recomendados</h4><p class="shortcut-desc">Elegidos para ti</p></div><i data-lucide="chevron-right" style="color: #a3a3a3; width: 16px;"></i></div>
+                        <div class="shortcut-card" onclick="openDrawView()"><div class="shortcut-icon"><i data-lucide="book-open"></i></div><div class="shortcut-text"><h4 class="shortcut-title">Dibujo libre</h4><p class="shortcut-desc">Crea sin límites</p></div><i data-lucide="chevron-right" style="color: #a3a3a3; width: 16px;"></i></div>
+                    </div>
+                    <div class="toolbar">
+                        <div class="search-bar"><i data-lucide="search"></i><input type="text" placeholder="Busca por nombre o sensación..."><div class="shortcut-key"><i data-lucide="command"></i> K</div></div>
+                        <button class="btn-filters">Más filtros</button>
+                    </div>
+                    <div class="filter-tags">
+                        <div class="tag-group"><button class="filter-tag active">Todos</button><button class="filter-tag">Apretar</button><button class="filter-tag">Estirar</button><button class="filter-tag">Exclusivos</button><button class="filter-tag">Rotatorios</button></div>
+                        <div class="sort-dropdown">Ordenar <select class="sort-select"><option>A-Z</option><option>Z-A</option></select></div>
+                    </div>
+                    <div class="recent-layout">
+                        <div class="list-container">
+                            <div class="list-header">6 fidgets para explorar</div>
+                            <div class="grid-2-cols">
+                                <div class="list-card inactive"><div class="fc-image cube"><div class="fc-heart"><i data-lucide="heart" style="color: var(--text-dark);"></i></div><div class="drawing-cube"><div style="background: #2D6EFF;"></div><div style="background: #4784c4;"></div><div style="background: #235889;"></div><div style="background: #8ab6a7;"></div></div></div><div class="fc-content"><span class="fc-eyebrow">APRETAR</span><h4 class="fc-title">Cubo táctil</h4><p class="fc-desc">Botones, interruptores, dial y joystick en un solo espacio.</p><a href="#" class="fc-link">Abrir &rarr;</a></div></div>
+                                <div class="list-card inactive"><div class="fc-image geo"><div class="fc-heart"><i data-lucide="heart" style="color: var(--text-dark);"></i></div><div class="drawing-geo"><div><div></div></div></div></div><div class="fc-content"><span class="fc-eyebrow">EXCLUSIVOS</span><h4 class="fc-title">Geométrico</h4><p class="fc-desc">Formas que respiran lentamente contigo.</p><a href="#" class="fc-link">Abrir &rarr;</a></div></div>
+                                <div class="list-card inactive"><div class="fc-image ondas"><div class="fc-heart"><i data-lucide="heart" style="color: var(--text-dark);"></i></div><div class="drawing-ondas"><div><div></div></div></div></div><div class="fc-content"><span class="fc-eyebrow">APRETAR</span><h4 class="fc-title">Ondas</h4><p class="fc-desc">Crea ondas calmadas con cada toque o movimiento.</p><a href="#" class="fc-link">Abrir &rarr;</a></div></div>
+                                <div class="list-card inactive"><div class="fc-image popit"><div class="fc-heart"><i data-lucide="heart" style="color: #d93025; fill: #d93025;"></i></div><div class="drawing-popit"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div><div class="fc-content"><span class="fc-eyebrow">APRETAR</span><h4 class="fc-title">Pop-it suave</h4><p class="fc-desc">Presiona burbujas a tu ritmo, sin prisa.</p><a href="#" class="fc-link">Abrir &rarr;</a></div></div>
+                                <div class="list-card inactive"><div class="fc-image slime"><div class="fc-heart"><i data-lucide="heart" style="color: var(--text-dark);"></i></div><div class="drawing-slime"></div></div><div class="fc-content"><span class="fc-eyebrow">ESTIRAR</span><h4 class="fc-title">Slime elástico</h4><p class="fc-desc">Estira una forma suave y deja que vuelva al centro.</p><a href="#" class="fc-link">Abrir &rarr;</a></div></div>
+                                <div class="list-card"><div class="fc-image spinner-bg"><div class="fc-heart"><i data-lucide="heart" style="color: #d93025; fill: #d93025;"></i></div><div class="windmill-shape"><div class="blade blade-1" style="background:#4B96F3"></div><div class="blade blade-2" style="background:#4B96F3"></div><div class="blade blade-3" style="background:#4B96F3"></div><div class="windmill-center" style="border-color:#e6f2ff; background: #e6f2ff;"></div></div></div><div class="fc-content"><span class="fc-eyebrow">ROTATORIOS</span><h4 class="fc-title">Spinner</h4><p class="fc-desc">Gira, observa y deja que el movimiento encuentre su ritmo.</p><a href="#" class="fc-link">Abrir &rarr;</a></div></div>
+                            </div>
+                        </div>
+                        <div class="preview-panel">
+                            <span class="preview-eyebrow">VISTA PREVIA</span>
+                            <div class="preview-image"><div class="windmill-shape"><div class="blade blade-1" style="background:#4B96F3"></div><div class="blade blade-2" style="background:#4B96F3"></div><div class="blade blade-3" style="background:#4B96F3"></div><div class="windmill-center" style="border-color:#e6f2ff; background: #e6f2ff;"></div></div></div>
+                            <span class="fc-eyebrow" style="margin-bottom: 8px;">ROTATORIOS</span><h3 class="preview-title">Spinner</h3><p class="preview-desc">Gira, observa y deja que el movimiento encuentre su ritmo.</p>
+                            <ul class="preview-features"><li>Sin objetivos ni presión</li><li>Funciona con mouse y tacto</li><li>Sonido opcional</li></ul>
+                            <button class="preview-btn">Abrir Spinner ↗</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: CALM GAMES -->
+                <div id="tab-calm-games" class="app-tab hidden">
+                    <div class="page-header">
+                        <span class="eyebrow">EXPLORA A TU MANERA</span>
+                        <h1>Calm Games</h1>
+                        <p>Encuentra una textura, un movimiento o una nueva forma de jugar.</p>
+                    </div>
+                    <div class="toolbar">
+                        <div class="search-bar"><i data-lucide="search"></i><input type="text" placeholder="Busca por nombre o sensación..."><div class="shortcut-key"><i data-lucide="command"></i> K</div></div>
+                        <button class="btn-filters">Más filtros</button>
+                    </div>
+                    <div class="filter-tags">
+                        <div class="tag-group"><button class="filter-tag active">Todos</button><button class="filter-tag">Apretar</button><button class="filter-tag">Estirar</button><button class="filter-tag">Exclusivos</button><button class="filter-tag">Rotatorios</button></div>
+                        <div class="sort-dropdown">Ordenar <select class="sort-select"><option>A-Z</option><option>Z-A</option></select></div>
+                    </div>
+                    <div class="recent-layout">
+                        <div class="list-container">
+                            <div class="list-header">2 fidgets para explorar</div>
+                            <div class="grid-2-cols">
+                                <div class="list-card inactive">
+                                    <div class="fc-image geo"><div class="fc-heart"><i data-lucide="heart" style="color: var(--text-dark);"></i></div><div class="drawing-geo"><div><div></div></div></div></div>
+                                    <div class="fc-content"><span class="fc-eyebrow">EXCLUSIVOS</span><h4 class="fc-title">Geométrico</h4><p class="fc-desc">Formas que respiran lentamente contigo.</p><a href="#" class="fc-link">Abrir &rarr;</a></div>
+                                </div>
+                                <div class="list-card">
+                                    <div class="fc-image popit"><div class="fc-heart"><i data-lucide="heart" style="color: #d93025; fill: #d93025;"></i></div><div class="drawing-popit"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
+                                    <div class="fc-content"><span class="fc-eyebrow">APRETAR</span><h4 class="fc-title">Pop-it suave</h4><p class="fc-desc">Presiona burbujas a tu ritmo, sin prisa.</p><a href="#" class="fc-link">Abrir &rarr;</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="preview-panel">
+                            <span class="preview-eyebrow">VISTA PREVIA</span>
+                            <div class="preview-image popit-bg"><div class="drawing-popit"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
+                            <span class="fc-eyebrow" style="margin-bottom: 8px;">APRETAR</span><h3 class="preview-title">Pop-it suave</h3><p class="preview-desc">Presiona burbujas a tu ritmo, sin prisa.</p>
+                            <ul class="preview-features"><li>Sin objetivos ni presión</li><li>Funciona con mouse y tacto</li><li>Sonido opcional</li></ul>
+                            <button class="preview-btn">Abrir Pop-it suave ↗</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: CHECK-IN EMOCIONAL -->
+                <div id="tab-checkin" class="app-tab hidden">
+                    <div class="checkin-page-wrapper">
+                        <button class="checkin-back-link" onclick="showAppTab('dashboard')">&larr; Volver a Inicio</button>
+
+                        <div class="checkin-page-header">
+                            <span class="eyebrow">UN MOMENTO CONTIGO</span>
+                            <h1>¿Cómo te sientes?</h1>
+                            <p>No hay respuestas correctas. Elige lo que más se acerque a este momento.</p>
+                        </div>
+
+                        <div class="checkin-box">
+                            <div class="checkin-mood-grid" id="checkin-mood-grid">
+                                <button type="button" class="checkin-mood-card" data-mood="Muy difícil" data-class="ci-mood-1" onclick="selectCheckinMood(this)">
+                                    <div class="ci-circle ci-mood-1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 15 Q 12 11 17 15" /></svg></div>
+                                    <span class="checkin-mood-label">Muy difícil</span>
+                                </button>
+                                <button type="button" class="checkin-mood-card" data-mood="Difícil" data-class="ci-mood-2" onclick="selectCheckinMood(this)">
+                                    <div class="ci-circle ci-mood-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 14.5 Q 12 12 16 14.5" /></svg></div>
+                                    <span class="checkin-mood-label">Difícil</span>
+                                </button>
+                                <button type="button" class="checkin-mood-card" data-mood="Neutral" data-class="ci-mood-3" onclick="selectCheckinMood(this)">
+                                    <div class="ci-circle ci-mood-3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 13 L 17 13" /></svg></div>
+                                    <span class="checkin-mood-label">Neutral</span>
+                                </button>
+                                <button type="button" class="checkin-mood-card" data-mood="Bien" data-class="ci-mood-4" onclick="selectCheckinMood(this)">
+                                    <div class="ci-circle ci-mood-4"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 12.5 Q 12 15.5 16 12.5" /></svg></div>
+                                    <span class="checkin-mood-label">Bien</span>
+                                </button>
+                                <button type="button" class="checkin-mood-card" data-mood="Muy bien" data-class="ci-mood-5" onclick="selectCheckinMood(this)">
+                                    <div class="ci-circle ci-mood-5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 12 Q 12 16.5 17 12" /></svg></div>
+                                    <span class="checkin-mood-label">Muy bien</span>
+                                </button>
+                            </div>
+
+                            <div class="checkin-note-header">
+                                <label for="checkin-note-input">¿Quieres contarnos algo?</label>
+                                <span>Opcional</span>
+                            </div>
+
+                            <div class="checkin-textarea-wrap">
+                                <textarea id="checkin-note-input" class="checkin-textarea" maxlength="240" placeholder="Escribe lo que necesites, solo para ti..." oninput="updateCheckinCount()"></textarea>
+                                <span id="checkin-char-count" class="checkin-char-count">0/240</span>
+                            </div>
+
+                            <button type="button" id="btn-save-checkin" class="btn-save-checkin" onclick="saveCheckinEntry()">Guardar check-in</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: HISTORIAL EMOCIONAL -->
+                <div id="tab-history" class="app-tab hidden">
+                    <div class="page-header" style="margin-bottom: 34px;">
+                        <span class="eyebrow">TU HISTORIA, SIN JUICIOS</span>
+                        <h1>Historial emocional</h1>
+                        <p>Observa tus registros con curiosidad y amabilidad.</p>
+                    </div>
+
+                    <div class="history-toolbar">
+                        <div class="history-filter">
+                            <label for="history-month-filter">Filtrar por mes</label>
+                            <select id="history-month-filter" class="history-select" onchange="renderHistoryEntries()">
+                                <option value="all">Todos</option>
+                                <option value="nov">Noviembre 2026</option>
+                                <option value="oct">Octubre 2026</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="history-list" class="history-list"></div>
+                </div>
+
+                <!-- TAB: CONTACTOS DE EMERGENCIA -->
+                <div id="tab-emergency-contacts" class="app-tab hidden">
+                    <div class="page-header" style="margin-bottom: 28px;">
+                        <span class="eyebrow">RED DE APOYO</span>
+                        <h1>Contactos de emergencia</h1>
+                        <p>Personas de confianza y líneas de apoyo disponibles cuando necesites acompañamiento.</p>
+                    </div>
+
+                    <div class="em-layout">
+                        <div class="em-stack">
+                            <!-- Contacto Personal -->
+                            <div class="em-card">
+                                <div class="em-card-header">
+                                    <div>
+                                        <span class="em-card-eyebrow">TU CONTACTO PERSONAL</span>
+                                        <h3 class="em-card-title">Persona de confianza</h3>
+                                    </div>
+                                    <button type="button" class="em-btn" onclick="toggleEditContact()">
+                                        <i data-lucide="pencil"></i> Editar
+                                    </button>
+                                </div>
+
+                                <div class="em-contact-box">
+                                    <div class="em-contact-info">
+                                        <div class="em-avatar" id="em-contact-avatar">DH</div>
+                                        <div>
+                                            <div class="em-contact-name" id="em-contact-name">Diego Huamán</div>
+                                            <div class="em-contact-meta" id="em-contact-relation">Persona de confianza · Disponible para llamadas</div>
+                                            <div class="em-contact-phone" id="em-contact-phone">+51 987 654 321</div>
+                                        </div>
+                                    </div>
+                                    <div class="em-btn-row">
+                                        <a id="em-contact-call-btn" href="tel:+51987654321" class="em-btn em-btn-primary" onclick="showToast('Llamando a ' + personalContact.name + '...')">
+                                            <i data-lucide="phone"></i> Llamar
+                                        </a>
+                                        <button type="button" class="em-btn" onclick="copyText(personalContact.phone, 'Número de ' + personalContact.name + ' copiado')">
+                                            <i data-lucide="copy"></i> Copiar
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Formulario inline de edición -->
+                                <form id="em-edit-form" class="em-edit-form hidden" onsubmit="savePersonalContact(event)">
+                                    <div class="em-field">
+                                        <label for="edit-contact-name">Nombre completo</label>
+                                        <input type="text" id="edit-contact-name" required>
+                                    </div>
+                                    <div class="em-field">
+                                        <label for="edit-contact-phone">Teléfono</label>
+                                        <input type="tel" id="edit-contact-phone" required>
+                                    </div>
+                                    <div class="em-field" style="grid-column: 1 / -1;">
+                                        <label for="edit-contact-relation">Relación o nota rápida</label>
+                                        <input type="text" id="edit-contact-relation">
+                                    </div>
+                                    <div class="em-edit-actions">
+                                        <button type="button" class="em-btn" onclick="toggleEditContact(false)">Cancelar</button>
+                                        <button type="submit" class="em-btn em-btn-primary">Guardar cambios</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Lista rápida de Números de ayuda -->
+                            <div class="em-card">
+                                <div class="em-card-header">
+                                    <div>
+                                        <span class="em-card-eyebrow">ORIENTACIÓN EN PERÚ</span>
+                                        <h3 class="em-card-title">Números de ayuda</h3>
+                                    </div>
+                                    <a href="#" class="link-view-all" onclick="showAppTab('emergency-numbers')">Ver directorio completo &rarr;</a>
+                                </div>
+
+                                <div class="em-help-list">
+                                    <div class="em-help-row">
+                                        <div class="em-help-row-left">
+                                            <div class="em-num-pill">113</div>
+                                            <div>
+                                                <h4>Línea 113 – Opción 5 (MINSA)</h4>
+                                                <p>Orientación gratuita en salud mental y soporte emocional 24/7.</p>
+                                            </div>
+                                        </div>
+                                        <div class="em-btn-row">
+                                            <a href="tel:113" class="em-btn em-btn-primary" onclick="showToast('Marcando Línea 113...')"><i data-lucide="phone"></i> Llamar</a>
+                                            <button type="button" class="em-btn" onclick="copyText('113', 'Número 113 copiado')"><i data-lucide="copy"></i> Copiar</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="em-help-row">
+                                        <div class="em-help-row-left">
+                                            <div class="em-num-pill">106</div>
+                                            <div>
+                                                <h4>SAMU – Emergencias Médicas</h4>
+                                                <p>Atención móvil de urgencias médicas gratuita las 24 horas.</p>
+                                            </div>
+                                        </div>
+                                        <div class="em-btn-row">
+                                            <a href="tel:106" class="em-btn em-btn-primary" onclick="showToast('Marcando SAMU 106...')"><i data-lucide="phone"></i> Llamar</a>
+                                            <button type="button" class="em-btn" onclick="copyText('106', 'Número 106 copiado')"><i data-lucide="copy"></i> Copiar</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="em-help-row">
+                                        <div class="em-help-row-left">
+                                            <div class="em-num-pill">100</div>
+                                            <div>
+                                                <h4>Línea 100 (MIMP)</h4>
+                                                <p>Apoyo y protección frente a violencia familiar o situaciones de riesgo.</p>
+                                            </div>
+                                        </div>
+                                        <div class="em-btn-row">
+                                            <a href="tel:100" class="em-btn em-btn-primary" onclick="showToast('Marcando Línea 100...')"><i data-lucide="phone"></i> Llamar</a>
+                                            <button type="button" class="em-btn" onclick="copyText('100', 'Número 100 copiado')"><i data-lucide="copy"></i> Copiar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta Lateral: Si estás en peligro inmediato -->
+                        <div class="em-urgent-card">
+                            <span class="em-urgent-badge"><i data-lucide="alert-triangle"></i> Emergencia</span>
+                            <h3>Si estás en peligro inmediato</h3>
+                            <p>No tienes que atravesar este momento en soledad. Si tu seguridad o la de alguien más está en riesgo ahora mismo, comunícate directamente con emergencias.</p>
+                            <ul class="em-urgent-list">
+                                <li>• Policía Nacional del Perú: <strong>105</strong></li>
+                                <li>• Ambulancias SAMU: <strong>106</strong></li>
+                                <li>• Bomberos Voluntarios: <strong>116</strong></li>
+                            </ul>
+                            <a href="tel:105" class="em-btn em-btn-danger" onclick="showToast('Llamando a Emergencias 105...')">
+                                <i data-lucide="phone-call"></i> Llamar al 105 ahora
+                            </a>
+                            <button type="button" class="em-btn" style="width: 100%; justify-content: center;" onclick="showAppTab('emergency-numbers')">
+                                Ver todas las líneas 24/7
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: ARTÍCULOS -->
+                <div id="tab-articles" class="app-tab hidden">
+                    <div class="page-header" style="margin-bottom: 14px;">
+                        <span class="eyebrow">RECURSOS PARA ENTENDERTE</span>
+                        <h1>Artículos</h1>
+                        <p>Lecturas breves, claras y revisadas con cuidado.</p>
+                    </div>
+
+                    <div class="art-top-controls" id="art-top-controls">
+                        <span class="art-toggle-label">Modo solo texto</span>
+                        <label class="ui-switch" aria-label="Activar modo solo texto">
+                            <input type="checkbox" id="art-text-only-toggle" onchange="toggleArticleTextOnly()">
+                            <span class="ui-slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Cuadrícula de 3 artículos -->
+                    <div id="art-grid" class="art-grid">
+                        <article class="art-card" onclick="openArticle('sobrecarga')">
+                            <div class="art-banner art-b1"><i data-lucide="wind"></i></div>
+                            <div class="art-body">
+                                <span class="art-meta">BIENESTAR · 5 MIN</span>
+                                <h3 class="art-title">Cómo reconocer una sobrecarga</h3>
+                                <p class="art-desc">Señales suaves para escuchar lo que tu cuerpo necesita.</p>
+                                <span class="art-link">Leer artículo &rarr;</span>
+                            </div>
+                        </article>
+
+                        <article class="art-card" onclick="openArticle('pausas')">
+                            <div class="art-banner art-b2"><i data-lucide="clock"></i></div>
+                            <div class="art-body">
+                                <span class="art-meta">BIENESTAR · 4 MIN</span>
+                                <h3 class="art-title">Pausas que sí caben en tu día</h3>
+                                <p class="art-desc">Ideas pequeñas y realistas, sin añadir presión.</p>
+                                <span class="art-link">Leer artículo &rarr;</span>
+                            </div>
+                        </article>
+
+                        <article class="art-card" onclick="openArticle('espacio')">
+                            <div class="art-banner art-b3"><i data-lucide="home"></i></div>
+                            <div class="art-body">
+                                <span class="art-meta">BIENESTAR · 7 MIN</span>
+                                <h3 class="art-title">Preparar un espacio sensorial</h3>
+                                <p class="art-desc">Ajustes simples de luz, sonido y textura.</p>
+                                <span class="art-link">Leer artículo &rarr;</span>
+                            </div>
+                        </article>
+                    </div>
+
+                    <!-- Vista de lectura completa -->
+                    <div id="art-reader" class="art-reader hidden">
+                        <button type="button" class="checkin-back-link" onclick="closeArticleReader()">&larr; Volver a Artículos</button>
+                        <div id="art-reader-content"></div>
+                    </div>
+                </div>
+
+                <!-- TAB: MÚSICAS (SONIDOS PARA TU ESPACIO) -->
+                <div id="tab-music" class="app-tab hidden">
+                    <div class="page-header" style="margin-bottom: 30px;">
+                        <span class="eyebrow">AISLAMIENTO AUDITIVO</span>
+                        <h1>Sonidos para tu espacio</h1>
+                        <p>Elige una atmósfera estable. Puedes detenerla en cualquier momento.</p>
+                    </div>
+
+                    <div class="sound-grid">
+                        <div class="sound-card" data-sound="white" onclick="selectAmbientSound('white')">
+                            <div class="sound-thumb s-white"><i data-lucide="volume-2"></i></div>
+                            <h3 class="sound-title">Ruido blanco</h3>
+                            <p class="sound-desc">Un sonido constante y suave</p>
+                            <span class="sound-action">Reproducir</span>
+                        </div>
+
+                        <div class="sound-card" data-sound="rain" onclick="selectAmbientSound('rain')">
+                            <div class="sound-thumb s-rain"><i data-lucide="wind"></i></div>
+                            <h3 class="sound-title">Lluvia</h3>
+                            <p class="sound-desc">Gotas tranquilas a lo lejos</p>
+                            <span class="sound-action">Reproducir</span>
+                        </div>
+
+                        <div class="sound-card" data-sound="sea" onclick="selectAmbientSound('sea')">
+                            <div class="sound-thumb s-sea"><i data-lucide="wind"></i></div>
+                            <h3 class="sound-title">Mar</h3>
+                            <p class="sound-desc">Olas que llegan y se retiran</p>
+                            <span class="sound-action">Reproducir</span>
+                        </div>
+
+                        <div class="sound-card" data-sound="forest" onclick="selectAmbientSound('forest')">
+                            <div class="sound-thumb s-forest"><i data-lucide="music"></i></div>
+                            <h3 class="sound-title">Bosque</h3>
+                            <p class="sound-desc">Una atmósfera natural y ligera</p>
+                            <span class="sound-action">Reproducir</span>
+                        </div>
+                    </div>
+
+                    <!-- Barra de reproducción inferior -->
+                    <div class="sound-player">
+                        <div class="player-left">
+                            <button type="button" id="player-play-btn" class="player-play-btn" onclick="togglePlayCurrentSound()" aria-label="Reproducir o pausar">
+                                <i data-lucide="play"></i>
+                            </button>
+                            <div>
+                                <div class="player-track-title" id="player-track-title">Ningún sonido seleccionado</div>
+                                <div class="player-track-sub" id="player-track-sub">Elige una tarjeta para comenzar</div>
+                            </div>
+                        </div>
+
+                        <div class="player-volume">
+                            <span>Volumen</span>
+                            <input type="range" id="player-volume-range" class="player-range" min="0" max="100" value="35" oninput="updateAmbientVolume(this.value)">
+                            <span id="player-volume-val">35%</span>
+                        </div>
+
+                        <div class="player-right">
+                            <select id="player-timer-select" class="player-timer-select" onchange="setAmbientTimer(this.value)">
+                                <option value="0">Sin temporizador</option>
+                                <option value="5">5 minutos</option>
+                                <option value="10">10 minutos</option>
+                                <option value="15">15 minutos</option>
+                                <option value="30">30 minutos</option>
+                            </select>
+
+                            <label class="ui-switch player-master-switch" title="Activar o silenciar audio">
+                                <input type="checkbox" id="player-master-toggle" checked onchange="toggleMasterAudio(this.checked)">
+                                <span class="ui-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- TAB: BREATHE -->
+                <div id="tab-breathe" class="app-tab hidden">
+                    <div class="breathe-wrapper">
+                        <div class="breathe-header">
+                            <span class="eyebrow">VUELVE A TU RESPIRACIÓN</span>
+                            <h1>Respira conmigo</h1>
+                            <p>El círculo marca un ritmo suave. Puedes pausar cuando quieras.</p>
+                        </div>
+
+                        <div class="breathe-stage">
+                            <div id="breathe-rings" class="breathe-rings">
+                                <div class="breathe-ring-mid">
+                                    <div class="breathe-core">
+                                        <span id="breathe-state" class="breathe-state">Listo</span>
+                                        <span id="breathe-sub" class="breathe-sub">Respira a tu ritmo</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="breathe-controls">
+                            <button type="button" id="btn-breathe-toggle" class="btn-breathe-primary" onclick="toggleBreathe()">Iniciar</button>
+                            <select id="breathe-pattern-select" class="breathe-select" onchange="resetBreathe()" aria-label="Patrón de respiración">
+                                <option value="4-4-6" selected>4-4-6</option>
+                                <option value="4-4-4-4">4-4-4-4</option>
+                                <option value="4-7-8">4-7-8</option>
+                            </select>
+                            <button type="button" class="btn-breathe-reset" onclick="resetBreathe()">Reiniciar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: AJUSTES (6 SECCIONES CORE) -->
+                <div id="tab-settings" class="app-tab hidden">
+                    <div class="page-header" style="margin-bottom: 28px;">
+                        <span class="eyebrow">TU ESPACIO, TUS PREFERENCIAS</span>
+                        <h1>Ajustes</h1>
+                        <p>Adapta Fidget a lo que te resulte más cómodo.</p>
+                    </div>
+
+                    <div class="settings-layout">
+                        <nav class="settings-nav" id="settings-nav" aria-label="Secciones de ajustes">
+                            <button type="button" class="settings-nav-btn active" data-sec="perfil" onclick="showSettingsSection('perfil')"><span>Perfil</span><i data-lucide="chevron-right"></i></button>
+                            <button type="button" class="settings-nav-btn" data-sec="accesibilidad" onclick="showSettingsSection('accesibilidad')"><span>Accesibilidad</span><i data-lucide="chevron-right"></i></button>
+                            <button type="button" class="settings-nav-btn" data-sec="apariencia" onclick="showSettingsSection('apariencia')"><span>Apariencia</span><i data-lucide="chevron-right"></i></button>
+                            <button type="button" class="settings-nav-btn" data-sec="sonido" onclick="showSettingsSection('sonido')"><span>Sonido</span><i data-lucide="chevron-right"></i></button>
+                            <button type="button" class="settings-nav-btn" data-sec="seguridad" onclick="showSettingsSection('seguridad')"><span>Seguridad</span><i data-lucide="chevron-right"></i></button>
+                            <button type="button" class="settings-nav-btn" data-sec="privacidad" onclick="showSettingsSection('privacidad')"><span>Privacidad</span><i data-lucide="chevron-right"></i></button>
+                        </nav>
+
+                        <div class="settings-panel-card">
+                            <!-- 1. PERFIL (HU-010 + HU-009) -->
+                            <section id="set-perfil" class="settings-section">
+                                <h2>Perfil</h2>
+                                <p class="settings-subtitle">Los cambios se guardan automáticamente en este dispositivo.</p>
+
+                                <div class="profile-avatar-row">
+                                    <div class="profile-avatar-preview" id="set-avatar-preview">VQ</div>
+                                    <div class="profile-avatar-actions">
+                                        <input type="file" id="set-avatar-input" accept="image/jpeg,image/png" style="display: none;" onchange="handleAvatarUpload(event)">
+                                        <button type="button" class="settings-btn-outline" style="padding: 8px 14px; font-size: 13px;" onclick="document.getElementById('set-avatar-input').click()">Cambiar foto de perfil</button>
+                                        <span class="profile-avatar-hint">Formatos JPG o PNG · Máximo 5 MB</span>
+                                    </div>
+                                </div>
+
+                                <form onsubmit="saveUserProfile(event)">
+                                    <div class="settings-field">
+                                        <label for="set-profile-name">Nombre</label>
+                                        <input type="text" id="set-profile-name" value="Valeria Quispe" required>
+                                    </div>
+                                    <div class="settings-field">
+                                        <label for="set-profile-email">Correo</label>
+                                        <input type="email" id="set-profile-email" value="valeria@fidget.pe" required>
+                                    </div>
+                                    <div class="settings-field">
+                                        <label for="set-profile-city">Ciudad</label>
+                                        <input type="text" id="set-profile-city" value="Lima, Perú">
+                                    </div>
+                                    <button type="submit" class="settings-btn-primary">Guardar cambios</button>
+                                </form>
+
+                                <div class="profile-logout-zone">
+                                    <div>
+                                        <h4 style="font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 3px;">Sesión activa</h4>
+                                        <p style="font-size: 12px; color: var(--text-muted-dark);">Cierra tu sesión para proteger tus registros emocionales.</p>
+                                    </div>
+                                    <button type="button" class="settings-btn-danger-soft" style="margin-top: 0;" onclick="openLogoutModal()">Cerrar sesión</button>
+                                </div>
+                            </section>
+
+                            <!-- 2. ACCESIBILIDAD (HU-004, HU-029, HU-044) -->
+                            <section id="set-accesibilidad" class="settings-section hidden">
+                                <h2>Accesibilidad</h2>
+                                <p class="settings-subtitle">Los cambios se guardan automáticamente en este dispositivo.</p>
+                                <div id="a11y-preview-box" class="a11y-preview-box">
+                                    <span class="eyebrow">VISTA PREVIA</span>
+                                    <h4 id="a11y-preview-title">Un momento para respirar.</h4>
+                                    <p id="a11y-preview-text">Puedes tomarte el tiempo que necesites. No hay prisa.</p>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-row-info">
+                                        <h4>Fuente de lectura fácil</h4>
+                                        <p>Usa una tipografía más abierta y legible (optimizada para dislexia).</p>
+                                    </div>
+                                    <label class="ui-switch">
+                                        <input type="checkbox" id="set-easy-font" onchange="toggleEasyFont(this.checked)">
+                                        <span class="ui-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="settings-range-block">
+                                    <div class="settings-range-header">
+                                        <h4>Tamaño de texto</h4>
+                                        <span id="set-font-size-val">16px</span>
+                                    </div>
+                                    <input type="range" id="set-font-size-range" min="14" max="22" value="16" oninput="updateA11yFontSize(this.value)">
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-row-info">
+                                        <h4>Ocultar métricas numéricas</h4>
+                                        <p>Reemplaza contadores y minutos por mensajes positivos.</p>
+                                    </div>
+                                    <label class="ui-switch">
+                                        <input type="checkbox" id="set-hide-metrics" onchange="toggleHideMetrics(this.checked)">
+                                        <span class="ui-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-row-info">
+                                        <h4>Modo solo texto</h4>
+                                        <p>Oculta ilustraciones en artículos.</p>
+                                    </div>
+                                    <label class="ui-switch">
+                                        <input type="checkbox" id="set-text-only-sync" onchange="syncTextOnlyMode(this.checked)">
+                                        <span class="ui-slider"></span>
+                                    </label>
+                                </div>
+                            </section>
+
+                            <!-- 3. APARIENCIA (HU-022: Dark Mode de bajo contraste + sistema) -->
+                            <section id="set-apariencia" class="settings-section hidden">
+                                <h2>Apariencia</h2>
+                                <p class="settings-subtitle">Los cambios se guardan automáticamente en este dispositivo.</p>
+                                <div class="settings-row">
+                                    <div class="settings-row-info">
+                                        <h4>Modo oscuro</h4>
+                                        <p>Paleta oscura de bajo contraste para evitar fatiga visual.</p>
+                                    </div>
+                                    <label class="ui-switch">
+                                        <input type="checkbox" id="set-dark-mode" onchange="toggleDarkMode(this.checked)">
+                                        <span class="ui-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-row-info">
+                                        <h4>Adaptar al sistema</h4>
+                                        <p>Sincroniza automáticamente con el modo claro/oscuro de tu dispositivo.</p>
+                                    </div>
+                                    <label class="ui-switch">
+                                        <input type="checkbox" id="set-auto-dark" onchange="toggleAutoSystemDark(this.checked)">
+                                        <span class="ui-slider"></span>
+                                    </label>
+                                </div>
+                            </section>
+
+                            <!-- 4. SONIDO (HU-028: Silenciado rápido maestro) -->
+                            <section id="set-sonido" class="settings-section hidden">
+                                <h2>Sonido</h2>
+                                <p class="settings-subtitle">Los cambios se guardan automáticamente en este dispositivo.</p>
+                                <div class="settings-row">
+                                    <div class="settings-row-info">
+                                        <h4>Silenciar todo</h4>
+                                        <p>Reduce suavemente a cero todos los sonidos de la app.</p>
+                                    </div>
+                                    <label class="ui-switch">
+                                        <input type="checkbox" id="set-mute-all" onchange="syncMuteAll(this.checked)">
+                                        <span class="ui-slider"></span>
+                                    </label>
+                                </div>
+                            </section>
+
+                            <!-- 5. SEGURIDAD (HU-040: Actualizar contraseña) -->
+                            <section id="set-seguridad" class="settings-section hidden">
+                                <h2>Seguridad</h2>
+                                <p class="settings-subtitle">Los cambios se guardan automáticamente en este dispositivo.</p>
+                                <div class="settings-row">
+                                    <div class="settings-row-info">
+                                        <h4>Actualizar contraseña</h4>
+                                        <p>Cambia tu clave de acceso validando tu contraseña actual.</p>
+                                    </div>
+                                    <button type="button" class="settings-btn-outline" onclick="openChangePasswordModal()">Actualizar</button>
+                                </div>
+                            </section>
+
+                            <!-- 6. PRIVACIDAD (HU-024 + HU-015) -->
+                            <section id="set-privacidad" class="settings-section hidden">
+                                <h2>Privacidad</h2>
+                                <p class="settings-subtitle">Los cambios se guardan automáticamente en este dispositivo.</p>
+                                <div class="privacy-block">
+                                    <h4>Política de privacidad</h4>
+                                    <p>Fidget trata tus datos conforme a la Ley N.º 29733, Ley de Protección de Datos Personales del Perú. Tus registros se guardan localmente y no se venden ni comparten.</p>
+                                    <button type="button" class="settings-btn-outline" style="margin-top: 10px; font-size: 13px; padding: 8px 14px;" onclick="openPrivacyModal()">Leer documento completo</button>
+                                </div>
+                                <div class="privacy-block">
+                                    <h4>Tus derechos</h4>
+                                    <p>Puedes acceder, rectificar, cancelar u oponerte al tratamiento de tus datos en cualquier momento desde este dispositivo.</p>
+                                </div>
+                                <button type="button" class="settings-btn-danger-soft" onclick="openDeleteAccountModal()">Eliminar cuenta</button>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+                <!-- TAB: FOCUS MODE (HU-031) -->
+                <div id="tab-focus" class="app-tab hidden">
+                    <div class="page-header" style="margin-bottom: 24px;">
+                        <span class="eyebrow">CONCENTRACIÓN SIN DISTRACCIONES</span>
+                        <h1>Focus Mode</h1>
+                        <p>Elige un bloque de tiempo. Ocultaremos todos los menús mientras te concentras.</p>
+                    </div>
+
+                    <div class="focus-setup-card">
+                        <span class="eyebrow" style="color: var(--primary-blue);">DURACIÓN DEL BLOQUE</span>
+                        <h2 style="font-size: 26px; font-weight: 500; color: var(--text-dark);">Selecciona tu tiempo</h2>
+                        <div class="focus-presets" id="focus-presets">
+                            <button type="button" class="focus-preset-btn" onclick="selectFocusMinutes(15, this)">15 min</button>
+                            <button type="button" class="focus-preset-btn active" onclick="selectFocusMinutes(25, this)">25 min</button>
+                            <button type="button" class="focus-preset-btn" onclick="selectFocusMinutes(45, this)">45 min</button>
+                        </div>
+                        <button type="button" class="settings-btn-primary" style="padding: 14px 32px; font-size: 15px;" onclick="startFocusMode()">Iniciar concentración</button>
+                    </div>
+                </div>
+
+                <!-- TAB: ANCLAJE SENSORIAL 5-4-3-2-1 (HU-027) -->
+                <div id="tab-grounding" class="app-tab hidden">
+                    <div class="page-header" style="margin-bottom: 24px;">
+                        <span class="eyebrow">ATERRIZA EN EL PRESENTE</span>
+                        <h1>Anclaje 5-4-3-2-1</h1>
+                        <p>Avanza paso a paso a tu propio ritmo, sin cronómetros ni prisa.</p>
+                    </div>
+
+                    <div class="grounding-card">
+                        <div class="grounding-dots" id="grounding-dots"></div>
+                        <div class="grounding-num" id="grounding-step-num">5</div>
+                        <h2 id="grounding-step-title">5 cosas que puedes ver</h2>
+                        <p id="grounding-step-desc">Mira alrededor con calma e identifica cinco objetos, formas o colores cercanos a ti.</p>
+                        <button type="button" id="grounding-next-btn" class="settings-btn-primary" style="padding: 13px 28px;" onclick="nextGroundingStep()">Completado, siguiente</button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- VISTA 4: SPINNER INTERACTIVO -->
+    <div id="view-spinner" class="view hidden">
+        <div class="sp-topbar">
+            <div class="sp-topbar-left">
+                <button type="button" class="sp-top-btn" onclick="closeSpinnerView()">&larr; Atrás</button>
+            </div>
+            <div class="sp-topbar-title">Spinner</div>
+            <div class="sp-topbar-right">
+                <button type="button" id="sp-fav-btn" class="sp-top-btn icon-only fav-active" onclick="toggleSpinnerFavorite()" aria-label="Guardar en favoritos">
+                    <i data-lucide="heart"></i>
+                </button>
+                <button type="button" id="sp-fullscreen-btn" class="sp-top-btn" onclick="toggleSpinnerFullscreen()">Pantalla completa</button>
+                <button type="button" id="sp-mute-btn" class="sp-top-btn" onclick="toggleSpinnerMute()">
+                    <i data-lucide="volume-2"></i><span>Mute</span>
+                </button>
+                <button type="button" id="sp-timer-btn" class="sp-top-btn" onclick="cycleSpinnerTimer()">Temporizador</button>
+            </div>
+        </div>
+
+        <div class="sp-body">
+            <aside class="sp-sidebar">
+                <span class="eyebrow">GIRA A TU RITMO</span>
+                <h1>Arrastra y<br>suelta</h1>
+                <p class="sp-sidebar-desc">El movimiento seguirá suavemente el gesto de tu mano.</p>
+
+                <div class="sp-stats">
+                    <div>
+                        <div class="sp-stat-val" id="sp-rpm-val">0</div>
+                        <div class="sp-stat-label">RPM</div>
+                    </div>
+                    <div>
+                        <div class="sp-stat-val" id="sp-turns-val">0</div>
+                        <div class="sp-stat-label">vueltas</div>
+                    </div>
+                </div>
+
+                <div>
+                    <span class="sp-color-label">Color</span>
+                    <div class="sp-color-row" id="sp-color-row">
+                        <button type="button" class="sp-color-btn active" onclick="setSpinnerColor('blue', this)" aria-label="Azul">
+                            <span class="sp-color-dot" style="background: #4e83d4;"></span>
+                        </button>
+                        <button type="button" class="sp-color-btn" onclick="setSpinnerColor('green', this)" aria-label="Verde">
+                            <span class="sp-color-dot" style="background: #6d9e90;"></span>
+                        </button>
+                        <button type="button" class="sp-color-btn" onclick="setSpinnerColor('purple', this)" aria-label="Morado">
+                            <span class="sp-color-dot" style="background: #9f80b8;"></span>
+                        </button>
+                        <button type="button" class="sp-color-btn" onclick="setSpinnerColor('coral', this)" aria-label="Terracota">
+                            <span class="sp-color-dot" style="background: #ca8368;"></span>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="sp-stage" id="sp-stage">
+                <div class="sp-wheel" id="sp-wheel">
+                    <div class="sp-lobe sp-lobe-1"></div>
+                    <div class="sp-lobe sp-lobe-2"></div>
+                    <div class="sp-lobe sp-lobe-3"></div>
+                    <div class="sp-hub"></div>
+                </div>
+                <button type="button" class="fidget-reset-btn" onpointerdown="event.stopPropagation()" onclick="resetSpinner()">
+                    <i data-lucide="rotate-ccw"></i> Reiniciar
+                </button>
+            </section>
+        </div>
+    </div>
+    <!-- VISTA 5: POP-IT SUAVE -->
+    <div id="view-popit" class="view hidden">
+        <div class="sp-topbar">
+            <div class="sp-topbar-left">
+                <button type="button" class="sp-top-btn" onclick="closeFidgetView()">&larr; Atrás</button>
+            </div>
+            <div class="sp-topbar-title">Pop-it suave</div>
+            <div class="sp-topbar-right">
+                <button type="button" class="sp-top-btn icon-only fav-active" data-fidget-fav="popit" onclick="toggleFavorite('popit')" aria-label="Favorito">
+                    <i data-lucide="heart"></i>
+                </button>
+                <button type="button" class="sp-top-btn" onclick="toggleElementFullscreen('view-popit')">Pantalla completa</button>
+                <button type="button" class="sp-top-btn fidget-mute-btn" onclick="toggleFidgetGlobalMute()">
+                    <i data-lucide="volume-2"></i><span>Mute</span>
+                </button>
+                <button type="button" class="sp-top-btn fidget-timer-btn" onclick="cycleSpinnerTimer()">Temporizador</button>
+            </div>
+        </div>
+
+        <div class="sp-body">
+            <aside class="sp-sidebar">
+                <span class="eyebrow">PRESIONA Y SUELTA</span>
+                <h1>Pop-it suave</h1>
+                <p class="sp-sidebar-desc" style="margin-bottom: 10px;">Cada burbuja responde a tu toque. También puedes arrastrar sobre varias.</p>
+                <div class="popit-counter" id="popit-counter">Burbujas presionadas: 0 / 36</div>
+
+                <div>
+                    <span class="sp-color-label">Paleta</span>
+                    <div class="popit-palette-row" id="popit-palette-row">
+                        <button type="button" class="popit-pal-btn active" onclick="setPopitPalette('coral', this)">Coral</button>
+                        <button type="button" class="popit-pal-btn" onclick="setPopitPalette('ocean', this)">Ocean</button>
+                        <button type="button" class="popit-pal-btn" onclick="setPopitPalette('forest', this)">Forest</button>
+                        <button type="button" class="popit-pal-btn" onclick="setPopitPalette('lilac', this)">Lilac</button>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="popit-stage">
+                <div class="popit-board" id="popit-board"></div>
+                <button type="button" class="fidget-reset-btn" onclick="resetPopit()">
+                    <i data-lucide="rotate-ccw"></i> Reiniciar
+                </button>
+            </section>
+        </div>
+    </div>
+
+    <!-- VISTA 6: ONDAS -->
+    <div id="view-ondas" class="view hidden">
+        <div class="sp-topbar">
+            <div class="sp-topbar-left">
+                <button type="button" class="sp-top-btn" onclick="closeFidgetView()">&larr; Atrás</button>
+            </div>
+            <div class="sp-topbar-title">Ondas</div>
+            <div class="sp-topbar-right">
+                <button type="button" class="sp-top-btn icon-only" data-fidget-fav="ondas" onclick="toggleFavorite('ondas')" aria-label="Favorito">
+                    <i data-lucide="heart"></i>
+                </button>
+                <button type="button" class="sp-top-btn" onclick="toggleElementFullscreen('view-ondas')">Pantalla completa</button>
+                <button type="button" class="sp-top-btn fidget-mute-btn" onclick="toggleFidgetGlobalMute()">
+                    <i data-lucide="volume-2"></i><span>Mute</span>
+                </button>
+                <button type="button" class="sp-top-btn fidget-timer-btn" onclick="cycleSpinnerTimer()">Temporizador</button>
+            </div>
+        </div>
+
+        <section class="ondas-stage" id="ondas-stage">
+            <canvas id="ondas-canvas" class="ondas-canvas"></canvas>
+
+            <div class="ondas-header-card" onpointerdown="event.stopPropagation()">
+                <div>
+                    <span class="eyebrow">TOCA EL AGUA</span>
+                    <h1>Ondas</h1>
+                    <p>Haz clic, mantén o arrastra para crear un ritmo visual.</p>
+                </div>
+                <div class="ondas-header-right">
+                    <div class="ondas-count-box">
+                        <div class="ondas-count-val" id="ondas-count-val">0</div>
+                        <div class="ondas-count-label">toques</div>
+                    </div>
+                    <div class="sp-color-row" id="ondas-color-row">
+                        <button type="button" class="sp-color-btn active" onclick="setOndasColor('blue', this)" aria-label="Azul">
+                            <span class="sp-color-dot" style="background: #5585ca;"></span>
+                        </button>
+                        <button type="button" class="sp-color-btn" onclick="setOndasColor('green', this)" aria-label="Verde">
+                            <span class="sp-color-dot" style="background: #6d9e8c;"></span>
+                        </button>
+                        <button type="button" class="sp-color-btn" onclick="setOndasColor('purple', this)" aria-label="Morado">
+                            <span class="sp-color-dot" style="background: #9f80b8;"></span>
+                        </button>
+                        <button type="button" class="sp-color-btn" onclick="setOndasColor('coral', this)" aria-label="Coral">
+                            <span class="sp-color-dot" style="background: #ca8368;"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="fidget-reset-btn" onpointerdown="event.stopPropagation()" onclick="resetOndas()">
+                <i data-lucide="rotate-ccw"></i> Reiniciar
+            </button>
+        </section>
+    </div>
+
+    <!-- VISTA 7: CUBO TÁCTIL -->
+    <div id="view-cube" class="view hidden">
+        <div class="sp-topbar">
+            <div class="sp-topbar-left">
+                <button type="button" class="sp-top-btn" onclick="closeFidgetView()">&larr; Atrás</button>
+            </div>
+            <div class="sp-topbar-title">Cubo táctil</div>
+            <div class="sp-topbar-right">
+                <button type="button" class="sp-top-btn icon-only" data-fidget-fav="cube" onclick="toggleFavorite('cube')" aria-label="Favorito">
+                    <i data-lucide="heart"></i>
+                </button>
+                <button type="button" class="sp-top-btn" onclick="toggleElementFullscreen('view-cube')">Pantalla completa</button>
+                <button type="button" class="sp-top-btn fidget-mute-btn" onclick="toggleFidgetGlobalMute()">
+                    <i data-lucide="volume-2"></i><span>Mute</span>
+                </button>
+                <button type="button" class="sp-top-btn fidget-timer-btn" onclick="cycleSpinnerTimer()">Temporizador</button>
+            </div>
+        </div>
+
+        <div class="sp-body">
+            <aside class="sp-sidebar">
+                <span class="eyebrow">PEQUEÑOS MOVIMIENTOS</span>
+                <h1>Cubo táctil</h1>
+                <p class="sp-sidebar-desc" style="margin-bottom: 10px;">Seis controles distintos para mantener tus manos ocupadas.</p>
+                <div class="cube-counter" id="cube-counter">0 interacciones</div>
+            </aside>
+
+            <section class="cube-stage">
+                <div class="tactile-cube">
+                    <!-- 3 Botones -->
+                    <div class="cube-buttons-group">
+                        <button type="button" class="cube-push-btn" onclick="pressCubeButton(this)" aria-label="Botón 1"></button>
+                        <button type="button" class="cube-push-btn" onclick="pressCubeButton(this)" aria-label="Botón 2"></button>
+                        <button type="button" class="cube-push-btn" onclick="pressCubeButton(this)" aria-label="Botón 3"></button>
+                    </div>
+
+                    <!-- 2 Interruptores -->
+                    <div class="cube-switches-group">
+                        <button type="button" class="cube-switch" onclick="toggleCubeSwitch(this)" aria-label="Interruptor 1"><span class="cube-switch-knob"></span></button>
+                        <button type="button" class="cube-switch" onclick="toggleCubeSwitch(this)" aria-label="Interruptor 2"><span class="cube-switch-knob"></span></button>
+                    </div>
+
+                    <!-- 1 Dial giratorio -->
+                    <div class="cube-dial-wrap">
+                        <div class="cube-dial" id="cube-dial" onclick="rotateCubeDial()" title="Clic para girar">
+                            <span class="cube-dial-line"></span>
+                        </div>
+                    </div>
+
+                    <!-- 1 Joystick -->
+                    <div class="cube-joy-wrap">
+                        <div class="cube-joy-base" id="cube-joy-base">
+                            <div class="cube-joy-stick" id="cube-joy-stick"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="fidget-reset-btn" onclick="resetCube()">
+                    <i data-lucide="rotate-ccw"></i> Reiniciar
+                </button>
+            </section>
+        </div>
+    </div>
+    <!-- VISTA DEDICADA: MODO CRISIS S.O.S (HU-001 + HU-032) -->
+    <div id="view-sos" class="view hidden" role="dialog" aria-modal="true" aria-label="Modo de emergencia S.O.S">
+        <div class="sos-topbar">
+            <span class="sos-badge">Modo S.O.S · Alertas silenciadas</span>
+            <button type="button" class="btn-sos-finish" onclick="closeSosView()">Finalizar ejercicio</button>
+        </div>
+        <div class="sos-main">
+            <h1>Estás a salvo. Respira conmigo.</h1>
+            <p>Hemos silenciado las alertas para darte un espacio tranquilo. Sigue el ritmo suave del círculo.</p>
+            <div class="sos-breath-orb" id="sos-breath-orb">
+                <span class="sos-breath-label" id="sos-breath-label">Inhala</span>
+                <span class="sos-breath-sec" id="sos-breath-sec">4 s</span>
+            </div>
+            <div class="sos-actions">
+                <a id="sos-call-contact-btn" href="tel:+51987654321" class="btn-sos-call" onclick="showToast('Llamando a ' + personalContact.name + '...')">
+                    <i data-lucide="phone-call"></i> <span id="sos-call-contact-text">Llamar a Diego Huamán</span>
+                </a>
+                <a href="tel:113" class="btn-sos-finish" style="text-decoration: none;" onclick="showToast('Marcando Línea 113 MINSA...')">Línea 113 (Salud Mental)</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- VISTA DEDICADA: FIDGET VISUAL GEOMÉTRICO (HU-035) -->
+    <div id="view-geo" class="view hidden">
+        <div class="sp-topbar">
+            <div class="sp-topbar-left">
+                <button type="button" class="sp-top-btn" onclick="closeFidgetView()">&larr; Atrás</button>
+            </div>
+            <div class="sp-topbar-title">Geométrico</div>
+            <div class="sp-topbar-right">
+                <button type="button" class="sp-top-btn icon-only" data-fidget-fav="geo" onclick="toggleFavorite('geo')" aria-label="Favorito">
+                    <i data-lucide="heart"></i>
+                </button>
+                <button type="button" class="sp-top-btn" onclick="toggleElementFullscreen('view-geo')">Pantalla completa</button>
+                <button type="button" class="sp-top-btn fidget-mute-btn" onclick="toggleFidgetGlobalMute()">
+                    <i data-lucide="volume-2"></i><span>Mute</span>
+                </button>
+                <button type="button" class="sp-top-btn fidget-timer-btn" onclick="cycleSpinnerTimer()">Temporizador</button>
+            </div>
+        </div>
+
+        <div class="sp-body">
+            <aside class="sp-sidebar">
+                <span class="eyebrow">SEGUIMIENTO VISUAL</span>
+                <h1>Geométrico</h1>
+                <p class="sp-sidebar-desc" style="margin-bottom: 24px;">Formas que respiran y giran en bucle continuo, sin destellos ni cambios bruscos.</p>
+                <button type="button" id="geo-speed-btn" class="settings-btn-outline" onclick="toggleGeoSpeed()">Velocidad: Normal</button>
+            </aside>
+
+            <section class="geo-stage">
+                <div id="geo-mandala" class="geo-mandala">
+                    <div class="geo-layer-1"></div>
+                    <div class="geo-layer-2"></div>
+                    <div class="geo-layer-3"></div>
+                    <div class="geo-layer-core"></div>
+                </div>
+                <button type="button" class="fidget-reset-btn" onclick="resetGeoView()">
+                    <i data-lucide="rotate-ccw"></i> Reiniciar
+                </button>
+            </section>
+        </div>
+    </div>
+
+    <!-- VISTA DEDICADA: HERRAMIENTA DE DIBUJO LIBRE (HU-038) -->
+    <div id="view-draw" class="view hidden">
+        <div class="sp-topbar">
+            <div class="sp-topbar-left">
+                <button type="button" class="sp-top-btn" onclick="closeFidgetView()">&larr; Atrás</button>
+            </div>
+            <div class="sp-topbar-title">Dibujo libre</div>
+            <div class="sp-topbar-right">
+                <button type="button" class="sp-top-btn" onclick="toggleElementFullscreen('view-draw')">Pantalla completa</button>
+                <button type="button" class="sp-top-btn fidget-timer-btn" onclick="cycleSpinnerTimer()">Temporizador</button>
+            </div>
+        </div>
+
+        <section class="draw-stage" id="draw-stage">
+            <canvas id="draw-canvas" class="draw-canvas"></canvas>
+            <button type="button" class="btn-clear-canvas" onclick="clearDrawCanvas()">Limpiar lienzo</button>
+        </section>
+    </div>
+    <!-- VISTA DEDICADA: SLIME ELÁSTICO (HU-002) -->
+    <div id="view-slime" class="view hidden">
+        <div class="sp-topbar">
+            <div class="sp-topbar-left">
+                <button type="button" class="sp-top-btn" onclick="closeFidgetView()">&larr; Atrás</button>
+            </div>
+            <div class="sp-topbar-title">Slime elástico</div>
+            <div class="sp-topbar-right">
+                <button type="button" class="sp-top-btn icon-only" data-fidget-fav="slime" onclick="toggleFavorite('slime')" aria-label="Favorito">
+                    <i data-lucide="heart"></i>
+                </button>
+                <button type="button" class="sp-top-btn" onclick="toggleElementFullscreen('view-slime')">Pantalla completa</button>
+                <button type="button" class="sp-top-btn fidget-mute-btn" onclick="toggleFidgetGlobalMute()">
+                    <i data-lucide="volume-2"></i><span>Mute</span>
+                </button>
+                <button type="button" class="sp-top-btn fidget-timer-btn" onclick="cycleSpinnerTimer()">Temporizador</button>
+            </div>
+        </div>
+
+        <div class="sp-body">
+            <aside class="sp-sidebar">
+                <span class="eyebrow">ESTIRA Y SUELTA</span>
+                <h1>Slime elástico</h1>
+                <p class="sp-sidebar-desc" style="margin-bottom: 14px;">Arrastra desde el centro hacia cualquier dirección y observa cómo regresa suavemente.</p>
+                <div class="cube-counter" id="slime-counter">0 estiramientos</div>
+            </aside>
+
+            <section class="slime-stage" id="slime-stage">
+                <canvas id="slime-canvas" class="slime-canvas"></canvas>
+                <button type="button" class="fidget-reset-btn" onpointerdown="event.stopPropagation()" onclick="resetSlime()">
+                    <i data-lucide="rotate-ccw"></i> Reiniciar
+                </button>
+            </section>
+        </div>
+    </div>
+
+    <!-- OVERLAY FOCUS MODE ACTIVO (HU-031 CA02/CA03) -->
+    <div id="focus-active-overlay" class="focus-overlay hidden" role="dialog" aria-modal="true" aria-label="Temporizador de concentración activo">
+        <span class="eyebrow" style="color: var(--primary-blue); letter-spacing: 2px;">FOCUS MODE ACTIVO</span>
+        <h2 style="font-size: 24px; font-weight: 400; color: var(--text-muted-dark);">Respira y mantén el enfoque a tu ritmo</h2>
+        <div class="focus-clock" id="focus-clock-display">25:00</div>
+        <div class="focus-overlay-actions">
+            <button type="button" id="btn-focus-pause" class="settings-btn-primary" style="margin-top: 0; padding: 13px 26px;" onclick="toggleFocusPause()">Pausar</button>
+            <button type="button" class="settings-btn-outline" onclick="exitFocusMode()">Salir</button>
+        </div>
+    </div>
+
+    <!-- ALERTA VISUAL SUAVE DE FIN DE TEMPORIZADOR (HU-026 CA02/CA03) -->
+    <div id="soft-timer-banner" class="soft-timer-banner hidden" role="status" aria-live="polite">
+        <span style="font-size: 14px; font-weight: 500;">Es hora de retomar tu actividad</span>
+        <button type="button" class="settings-btn-outline" style="padding: 6px 12px; font-size: 12px;" onclick="dismissSoftTimerBanner()">Seguir usando</button>
+        <button type="button" class="settings-btn-primary" style="margin-top: 0; padding: 6px 12px; font-size: 12px;" onclick="dismissSoftTimerBanner(); closeFidgetView();">Cerrar herramienta</button>
+    </div>
+    <!-- MODALES INTERNOS (HU-008, HU-009, HU-015, HU-024, HU-040) -->
+    <div id="modal-recovery" class="app-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-rec-title">
+        <div class="app-modal-card">
+            <div class="app-modal-header">
+                <h3 id="modal-rec-title">Recuperar contraseña</h3>
+                <button type="button" class="app-modal-close" onclick="closeAllModals()" aria-label="Cerrar">&times;</button>
+            </div>
+            <p class="app-modal-body" style="margin-bottom: 14px;">Ingresa tu correo asociado y te enviaremos un enlace temporal válido por 24 horas.</p>
+            <div id="rec-alert" class="auth-alert" role="alert"></div>
+            <form onsubmit="handleRecoverySubmit(event)" novalidate>
+                <div class="input-group">
+                    <label for="rec-email">Correo electrónico *</label>
+                    <input type="email" id="rec-email" placeholder="valeria@fidget.pe" required>
+                </div>
+                <div class="app-modal-actions">
+                    <button type="button" class="settings-btn-outline" onclick="closeAllModals()">Cancelar</button>
+                    <button type="submit" class="settings-btn-primary" style="margin-top: 0;">Recuperar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-privacy" class="app-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-priv-title">
+        <div class="app-modal-card" style="max-width: 540px;">
+            <div class="app-modal-header">
+                <h3 id="modal-priv-title">Política de Privacidad</h3>
+                <button type="button" class="app-modal-close" onclick="closeAllModals()" aria-label="Cerrar">&times;</button>
+            </div>
+            <div class="app-modal-body" style="max-height: 320px; overflow-y: auto;">
+                <p style="margin-bottom: 12px;"><strong>1. Protección de Datos (Ley N.º 29733 - Perú):</strong> The Fidget App resguarda tu privacidad bajo principios de confidencialidad y consentimiento informado.</p>
+                <p style="margin-bottom: 12px;"><strong>2. Almacenamiento Local:</strong> Tus registros emocionales, contactos de emergencia y preferencias de accesibilidad se almacenan exclusivamente en tu dispositivo mediante almacenamiento local del navegador.</p>
+                <p><strong>3. Derechos ARCO:</strong> Puedes acceder, rectificar o eliminar permanentemente tu cuenta y todos tus datos desde la sección Privacidad en Ajustes.</p>
+            </div>
+            <div class="app-modal-actions">
+                <button type="button" class="settings-btn-primary" style="margin-top: 0;" onclick="closeAllModals()">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-logout" class="app-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-logout-title">
+        <div class="app-modal-card">
+            <div class="app-modal-header">
+                <h3 id="modal-logout-title">Cerrar sesión</h3>
+                <button type="button" class="app-modal-close" onclick="closeAllModals()" aria-label="Cerrar">&times;</button>
+            </div>
+            <p class="app-modal-body">¿Seguro que deseas cerrar tu sesión activa en este dispositivo?</p>
+            <div class="app-modal-actions">
+                <button type="button" class="settings-btn-outline" onclick="closeAllModals()">Cancelar</button>
+                <button type="button" class="settings-btn-primary" style="margin-top: 0;" onclick="confirmLogout()">Sí, salir</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-change-pass" class="app-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-pass-title">
+        <div class="app-modal-card">
+            <div class="app-modal-header">
+                <h3 id="modal-pass-title">Actualizar contraseña</h3>
+                <button type="button" class="app-modal-close" onclick="closeAllModals()" aria-label="Cerrar">&times;</button>
+            </div>
+            <div id="pass-alert" class="auth-alert" role="alert"></div>
+            <form onsubmit="handleChangePassword(event)" novalidate>
+                <div class="input-group">
+                    <label for="cp-current">Contraseña actual *</label>
+                    <input type="password" id="cp-current" required>
+                </div>
+                <div class="input-group">
+                    <label for="cp-new">Nueva contraseña (mínimo 8 caracteres) *</label>
+                    <input type="password" id="cp-new" required>
+                </div>
+                <div class="input-group">
+                    <label for="cp-confirm">Confirmar nueva contraseña *</label>
+                    <input type="password" id="cp-confirm" required>
+                </div>
+                <div class="app-modal-actions">
+                    <button type="button" class="settings-btn-outline" onclick="closeAllModals()">Cancelar</button>
+                    <button type="submit" class="settings-btn-primary" style="margin-top: 0;">Guardar nueva contraseña</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-delete-account" class="app-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-del-title">
+        <div class="app-modal-card">
+            <div class="app-modal-header">
+                <h3 id="modal-del-title">Eliminar cuenta</h3>
+                <button type="button" class="app-modal-close" onclick="closeAllModals()" aria-label="Cerrar">&times;</button>
+            </div>
+            <p class="app-modal-body" style="margin-bottom: 14px;">Esta acción borrará permanentemente tus datos personales e historial emocional. Ingresa tu contraseña actual para confirmar.</p>
+            <div id="del-acc-alert" class="auth-alert" role="alert"></div>
+            <form onsubmit="handleDeleteAccount(event)" novalidate>
+                <div class="input-group">
+                    <label for="del-acc-pass">Contraseña actual *</label>
+                    <input type="password" id="del-acc-pass" required>
+                </div>
+                <div class="app-modal-actions">
+                    <button type="button" class="settings-btn-outline" onclick="closeAllModals()">Cancelar</button>
+                    <button type="submit" class="em-btn em-btn-danger" style="width: auto; padding: 10px 18px;">Eliminar definitivamente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="em-toast" class="em-toast"></div>
+    <script src="../js/main.js"></script>
+    
+</body>
+</html>
