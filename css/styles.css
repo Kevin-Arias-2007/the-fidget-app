@@ -1237,46 +1237,106 @@
         #view-app.hide-metrics .qualitative-note { display: block; }
 
         /* =========================================================
-   FIX DEFINITIVO RESPONSIVE: DESKTOP, TABLET Y MÓVIL
+   BLOQUE MAESTRO RESPONSIVE UNIVERSAL (TABLET <= 1024px & MÓVIL <= 767px)
+   Desktop (> 1024px) queda 100% intacto.
    ========================================================= */
-*, *::before, *::after {
-    box-sizing: border-box;
-}
 
-html, body {
-    max-width: 100% !important;
-    overflow-x: hidden !important;
-}
-
-/* TABLET Y MÓVIL (<= 1024px) */
 @media (max-width: 1024px) {
-    /* Scroll natural de página completa en todas las vistas */
-    #view-welcome,
-    #view-login,
-    #view-app,
-    #view-spinner,
-    #view-popit,
-    #view-ondas,
-    #view-cube,
-    #view-geo,
-    #view-slime,
-    #view-draw,
-    #view-sos {
+    *, *::before, *::after {
+        box-sizing: border-box !important;
+    }
+
+    html, body {
         width: 100% !important;
         max-width: 100% !important;
+        overflow-x: hidden !important;
+        overflow-x: clip !important;
+        height: auto !important;
+    }
+
+    /* Scroll vertical natural en TODAS las vistas visibles */
+    .view:not(.hidden) {
+        position: relative !important;
+        inset: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
         height: auto !important;
         min-height: 100dvh !important;
-        overflow-x: hidden !important;
+        overflow-x: clip !important;
         overflow-y: visible !important;
     }
 
-    /* Eliminar la franja blanca izquierda y volver el sidebar un Drawer limpio */
+    img, svg, video, canvas {
+        max-width: 100%;
+    }
+
+    /* Evita el zoom automático del celular al tocar inputs */
+    input, select, textarea {
+        max-width: 100% !important;
+        font-size: 16px !important;
+    }
+
+    /* --- VISTA 2: LOGIN Y REGISTRO --- */
+    #view-login:not(.hidden) {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    .login-left,
+    .login-right {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        height: auto !important;
+        min-height: auto !important;
+        flex: none !important;
+    }
+    .login-left {
+        padding: 28px 24px !important;
+        gap: 18px !important;
+    }
+    .login-right {
+        padding: 28px 24px 48px !important;
+        display: block !important;
+    }
+    .form-container {
+        width: 100% !important;
+        max-width: 440px !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+    }
+    .form-options {
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+    }
+    .social-login {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+    .btn-social,
+    .btn-submit,
+    .input-group,
+    .input-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* --- VISTA 3: APP INTERNA + DRAWER LATERAL --- */
+    #view-app:not(.hidden) {
+        display: block !important;
+    }
+    .mobile-menu-btn {
+        display: inline-flex !important;
+        flex-shrink: 0 !important;
+    }
     .sidebar {
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         bottom: 0 !important;
-        width: 260px !important;
+        width: 265px !important;
         max-width: 82vw !important;
         height: 100dvh !important;
         z-index: 120 !important;
@@ -1289,7 +1349,6 @@ html, body {
         transform: translateX(0) !important;
         visibility: visible !important;
     }
-
     .main-content {
         margin-left: 0 !important;
         width: 100% !important;
@@ -1299,29 +1358,44 @@ html, body {
         min-height: 100dvh !important;
         overflow: visible !important;
     }
-
     .topbar {
         position: sticky !important;
         top: 0 !important;
-        z-index: 40 !important;
+        z-index: 50 !important;
         width: 100% !important;
+        height: auto !important;
+        min-height: 58px !important;
+        padding: 8px 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
     }
-
+    .topbar-left,
+    .topbar-center,
+    .topbar-right {
+        width: auto !important;
+        min-width: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+    }
     .content-scroll {
-        padding: 24px 20px 48px !important;
+        width: 100% !important;
+        max-width: 100% !important;
         height: auto !important;
         overflow: visible !important;
+        padding: 24px 20px 56px !important;
     }
 
-    /* Reorganización de columnas en Tablet */
+    /* --- GRILLAS Y LAYOUTS INTERNOS EN TABLET --- */
     .fidget-grid,
     .widget-grid,
     .art-grid,
     .sound-grid,
-    .shortcut-grid {
+    .shortcut-grid,
+    .lp-cards-grid {
         grid-template-columns: repeat(2, 1fr) !important;
     }
-
     .recent-layout {
         display: flex !important;
         flex-direction: column !important;
@@ -1330,30 +1404,135 @@ html, body {
     .preview-panel {
         position: static !important;
         width: 100% !important;
+        max-width: 100% !important;
     }
-
-    .em-layout {
+    .em-layout,
+    .settings-layout {
         grid-template-columns: 1fr !important;
+        gap: 20px !important;
     }
-
+    .settings-nav {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        gap: 8px !important;
+        padding-bottom: 6px !important;
+        width: 100% !important;
+    }
+    .settings-nav-btn {
+        flex: 0 0 auto !important;
+        white-space: nowrap !important;
+    }
     .lp-cta-banner {
         flex-direction: column !important;
         align-items: flex-start !important;
         gap: 20px !important;
     }
-
     .sound-player {
         flex-wrap: wrap !important;
         gap: 16px !important;
     }
+
+    /* --- VISTAS DEDICADAS DE LOS 7 FIDGET TOYS --- */
+    #view-spinner:not(.hidden),
+    #view-popit:not(.hidden),
+    #view-ondas:not(.hidden),
+    #view-cube:not(.hidden),
+    #view-geo:not(.hidden),
+    #view-slime:not(.hidden),
+    #view-draw:not(.hidden),
+    #view-sos:not(.hidden) {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .sp-topbar {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 56px !important;
+        padding: 10px 14px !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+    }
+    .sp-topbar-left,
+    .sp-topbar-title,
+    .sp-topbar-right {
+        width: auto !important;
+        min-width: 0 !important;
+    }
+    .sp-topbar-right {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        align-items: center !important;
+    }
+    .sp-body {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        height: auto !important;
+        flex: 1 0 auto !important;
+        overflow: visible !important;
+    }
+    .sp-sidebar {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        flex: none !important;
+        height: auto !important;
+        border-right: none !important;
+        border-bottom: 1px solid #eef0f4 !important;
+        padding: 20px 18px !important;
+    }
+    .sp-stage,
+    .popit-stage,
+    .cube-stage,
+    .geo-stage,
+    .slime-stage {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        flex: 1 0 auto !important;
+        min-height: 380px !important;
+        padding: 24px 16px 76px !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+    .ondas-stage,
+    .draw-stage {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 1 0 auto !important;
+        min-height: calc(100dvh - 110px) !important;
+        height: calc(100dvh - 110px) !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+    .slime-stage {
+        height: 400px !important;
+    }
+
+    /* Táctil suave solo dentro del área interactiva del fidget */
+    #sp-wheel,
+    #ondas-canvas,
+    #slime-canvas,
+    #draw-canvas,
+    #cube-joy-base {
+        touch-action: none !important;
+    }
 }
 
-/* MÓVIL (< 768px) */
+/* =========================================================
+   MÓVIL (< 768px): TODO A 1 COLUMNA, BOTONES Y TEXTOS AJUSTADOS
+   ========================================================= */
 @media (max-width: 767px) {
-    /* Header de bienvenida limpio en una sola línea */
+    /* --- VISTA 1: BIENVENIDA --- */
     #view-welcome header {
-        padding: 14px 16px !important;
-        gap: 8px !important;
+        padding: 14px 14px !important;
+        gap: 6px !important;
     }
     #view-welcome .logo {
         font-size: 16px !important;
@@ -1366,66 +1545,90 @@ html, body {
     }
     .btn-outline,
     .btn-solid {
-        padding: 7px 11px !important;
+        padding: 7px 10px !important;
         font-size: 12px !important;
         white-space: nowrap !important;
     }
-
-    /* Hero de Bienvenida sin desbordes laterales */
     main.welcome-main {
         padding: 20px 16px 32px !important;
         gap: 24px !important;
-        overflow: hidden !important;
     }
     .welcome-main h1 {
         font-size: 36px !important;
         line-height: 1.12 !important;
     }
+    .description {
+        font-size: 15px !important;
+        margin-bottom: 22px !important;
+    }
+    .cta-group {
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 10px !important;
+    }
+    .btn-main,
+    .btn-secondary {
+        width: 100% !important;
+        justify-content: center !important;
+    }
     .graphic-container {
-        width: 260px !important;
-        height: 260px !important;
+        width: 250px !important;
+        height: 250px !important;
         max-width: 100% !important;
         margin: 0 auto !important;
     }
-    .ring-1 { width: 240px !important; height: 240px !important; }
-    .ring-2 { width: 175px !important; height: 175px !important; }
-    .label-respira { right: 0 !important; top: 8px !important; left: auto !important; }
-    .label-ritmo { left: 0 !important; bottom: 8px !important; right: auto !important; }
-
+    .ring-1 { width: 235px !important; height: 235px !important; }
+    .ring-2 { width: 170px !important; height: 170px !important; }
+    .windmill-shape { width: 145px !important; height: 145px !important; }
+    .blade { width: 64px !important; height: 64px !important; }
+    .label-respira { right: 0 !important; top: 6px !important; left: auto !important; }
+    .label-ritmo { left: 0 !important; bottom: 6px !important; right: auto !important; }
     .lp-section { padding: 32px 16px !important; }
+    .lp-section-head h2 { font-size: 26px !important; }
     .lp-cards-grid { grid-template-columns: 1fr !important; }
-
-    /* Topbar y contenido principal en Móvil */
-    .topbar {
-        padding: 0 12px !important;
-        height: 58px !important;
-        gap: 6px !important;
+    .lp-cta-banner { padding: 24px 18px !important; }
+    footer {
+        flex-direction: column !important;
+        gap: 12px !important;
+        padding: 20px 16px !important;
+        text-align: center !important;
     }
-    .topbar-center { font-size: 14px !important; }
-    .btn-sos, .btn-audio {
-        padding: 6px 10px !important;
+    .footer-links {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 14px !important;
+    }
+
+    /* --- VISTA 2: LOGIN Y REGISTRO EN CELULAR --- */
+    .login-left { padding: 22px 16px !important; }
+    .login-left h1 { font-size: 28px !important; line-height: 1.15 !important; }
+    .login-right { padding: 20px 16px 40px !important; }
+    .social-login { grid-template-columns: 1fr !important; }
+
+    /* --- TOPBAR Y DASHBOARD EN CELULAR --- */
+    .topbar { padding: 8px 12px !important; gap: 6px !important; }
+    .topbar-center { font-size: 13px !important; gap: 5px !important; }
+    .topbar-right { gap: 6px !important; }
+    .btn-sos,
+    .btn-audio {
+        padding: 6px 9px !important;
         font-size: 12px !important;
+        white-space: nowrap !important;
     }
-    .content-scroll {
-        padding: 16px 14px 44px !important;
-    }
+    .content-scroll { padding: 16px 14px 48px !important; }
+    .page-header h1 { font-size: 28px !important; line-height: 1.15 !important; }
 
-    /* Hero Card de Inicio apilada verticalmente */
+    /* Hero Card de Inicio apilada */
     .hero-card {
         flex-direction: column !important;
-        padding: 22px 18px !important;
-        gap: 20px !important;
+        padding: 20px 16px !important;
+        gap: 18px !important;
     }
-    .hero-text {
-        max-width: 100% !important;
-        width: 100% !important;
-    }
-    .hero-text h2 {
-        font-size: 32px !important;
-    }
+    .hero-text { width: 100% !important; max-width: 100% !important; }
+    .hero-text h2 { font-size: 30px !important; }
     .hero-graphic {
         width: 100% !important;
-        min-height: 220px !important;
+        min-height: 210px !important;
         border-radius: 16px !important;
     }
 
@@ -1440,12 +1643,12 @@ html, body {
         grid-template-columns: 1fr !important;
     }
 
-    /* Check-in rápido y emocional */
+    /* Check-in rápido y página de Check-in */
     .checkin-card {
         flex-direction: column !important;
         align-items: stretch !important;
-        padding: 18px 16px !important;
-        gap: 16px !important;
+        padding: 18px 14px !important;
+        gap: 14px !important;
     }
     .mood-selector {
         display: grid !important;
@@ -1453,20 +1656,16 @@ html, body {
         gap: 4px !important;
         width: 100% !important;
     }
-    .mood-circle {
-        width: 38px !important;
-        height: 38px !important;
-    }
-    .mood-label {
-        font-size: 10px !important;
-        text-align: center !important;
-    }
+    .mood-circle { width: 38px !important; height: 38px !important; }
+    .mood-label { font-size: 10px !important; text-align: center !important; }
+    .checkin-page-wrapper { width: 100% !important; max-width: 100% !important; }
+    .checkin-box { padding: 18px 14px !important; }
     .checkin-mood-grid {
         grid-template-columns: repeat(3, 1fr) !important;
         gap: 8px !important;
     }
 
-    /* Buscadores, filtros y tarjetas de emergencia */
+    /* Catálogos: buscador, filtros y orden */
     .toolbar,
     .filter-tags {
         flex-direction: column !important;
@@ -1474,20 +1673,62 @@ html, body {
         gap: 10px !important;
     }
     .search-bar { width: 100% !important; }
+    .shortcut-key { display: none !important; }
     .tag-group { flex-wrap: wrap !important; gap: 6px !important; }
+    .sort-dropdown { justify-content: space-between !important; width: 100% !important; }
 
+    /* Historial emocional */
+    .history-toolbar,
+    .history-filter {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+    }
+    .history-item,
+    .history-card {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+    }
+
+    /* Contactos de emergencia y botones de llamada */
+    .em-card,
+    .em-urgent-card {
+        padding: 18px 15px !important;
+    }
+    .em-card-header {
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+    }
     .em-contact-box,
     .em-help-row {
         flex-direction: column !important;
         align-items: flex-start !important;
         gap: 12px !important;
     }
-    .em-btn-row {
+    .em-contact-info,
+    .em-help-row-left {
         width: 100% !important;
+    }
+    .em-btn-row {
+        display: flex !important;
         flex-wrap: wrap !important;
+        width: 100% !important;
+        gap: 8px !important;
+    }
+    .em-btn-row .em-btn {
+        flex: 1 1 auto !important;
+        justify-content: center !important;
+    }
+    .em-edit-actions {
+        flex-wrap: wrap !important;
+        width: 100% !important;
     }
 
-    /* Reproductor de sonidos */
+    /* Artículos */
+    .art-reader { padding: 18px 14px !important; }
+
+    /* Músicas / Reproductor */
     .sound-player {
         flex-direction: column !important;
         align-items: stretch !important;
@@ -1498,9 +1739,22 @@ html, body {
     .player-right {
         width: 100% !important;
         justify-content: space-between !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
     }
 
-    /* Ajustes y Modales */
+    /* Breathe */
+    .breathe-rings { width: 225px !important; height: 225px !important; }
+    .breathe-ring-mid { width: 170px !important; height: 170px !important; }
+    .breathe-core { width: 122px !important; height: 122px !important; }
+    .breathe-controls {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 10px !important;
+    }
+
+    /* Ajustes */
+    .settings-panel-card { padding: 18px 15px !important; }
     .profile-avatar-row,
     .profile-logout-zone,
     .settings-row {
@@ -1508,33 +1762,161 @@ html, body {
         align-items: flex-start !important;
         gap: 12px !important;
     }
-    .app-modal-card {
-        width: calc(100% - 28px) !important;
-        padding: 20px !important;
+
+    /* Focus Mode y Anclaje 5-4-3-2-1 */
+    .focus-setup-card,
+    .grounding-card {
+        padding: 22px 16px !important;
+        width: 100% !important;
+    }
+    .focus-presets {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 8px !important;
+    }
+    .focus-overlay {
+        padding: 24px 16px !important;
+        text-align: center !important;
+    }
+    .focus-clock { font-size: 54px !important; }
+    .focus-overlay-actions {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 10px !important;
     }
 
-    /* Fidgets dedicados en pantalla táctil */
-    .sp-body {
-        flex-direction: column !important;
+    /* --- FIDGET TOYS EN CELULAR: BARRA SUPERIOR + COMPONENTES --- */
+    .sp-topbar { padding: 8px 10px !important; gap: 8px !important; }
+    .sp-topbar-right {
+        width: 100% !important;
+        justify-content: space-between !important;
+        gap: 6px !important;
+    }
+    .sp-top-btn {
+        padding: 6px 9px !important;
+        font-size: 12px !important;
+    }
+    .sp-sidebar { padding: 16px 14px !important; }
+    .sp-sidebar h1 { font-size: 24px !important; margin-bottom: 6px !important; }
+    .sp-sidebar-desc { font-size: 13px !important; margin-bottom: 12px !important; }
+    .sp-stats { gap: 22px !important; margin-bottom: 12px !important; }
+    .popit-palette-row { flex-wrap: wrap !important; gap: 6px !important; }
+
+    /* Tamaños de cada Fidget en celular */
+    .sp-wheel { width: 225px !important; height: 225px !important; }
+    .sp-lobe { width: 102px !important; height: 102px !important; }
+
+    .popit-board {
+        width: 100% !important;
+        max-width: 300px !important;
+        padding: 18px !important;
+        border-radius: 26px !important;
+        gap: 7px !important;
+    }
+    .popit-board button,
+    .popit-bubble {
+        width: 100% !important;
+        min-width: 0 !important;
         height: auto !important;
-        overflow: visible !important;
+        aspect-ratio: 1 / 1 !important;
     }
-    .sp-stage,
-    .popit-stage,
-    .cube-stage,
-    .geo-stage,
-    .slime-stage {
-        min-height: 360px !important;
-        width: 100% !important;
-    }
-    .ondas-stage,
-    .draw-stage {
-        min-height: calc(100dvh - 64px) !important;
-        width: 100% !important;
-    }
-    .popit-board,
+
     .tactile-cube {
         width: 100% !important;
+        max-width: 300px !important;
+        height: auto !important;
+        padding: 22px 16px !important;
+        gap: 18px 14px !important;
+    }
+
+    .geo-mandala {
+        width: 220px !important;
+        height: 220px !important;
+    }
+
+    .ondas-header-card {
+        width: calc(100% - 24px) !important;
+        max-width: calc(100% - 24px) !important;
+        margin: 12px !important;
+        padding: 14px !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+    }
+    .ondas-header-right {
+        width: 100% !important;
+        justify-content: space-between !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    .fidget-reset-btn,
+    .btn-clear-canvas {
+        right: 14px !important;
+        bottom: 14px !important;
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+    }
+
+    /* --- MODO CRISIS S.O.S EN CELULAR --- */
+    .sos-topbar {
+        padding: 12px 14px !important;
+        height: auto !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+    .sos-main {
+        padding: 24px 16px 40px !important;
+        width: 100% !important;
+    }
+    .sos-main h1 { font-size: 26px !important; line-height: 1.2 !important; }
+    .sos-breath-orb { width: 170px !important; height: 170px !important; }
+    .sos-actions {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
         max-width: 320px !important;
+        gap: 10px !important;
+        margin: 0 auto !important;
+    }
+    .sos-actions a,
+    .sos-actions button {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+
+    /* --- MODALES, TOAST Y BANNER DE TEMPORIZADOR --- */
+    .app-modal-backdrop {
+        padding: 14px !important;
+        overflow-y: auto !important;
+    }
+    .app-modal-card {
+        width: 100% !important;
+        max-width: 420px !important;
+        max-height: 88dvh !important;
+        overflow-y: auto !important;
+        padding: 20px 16px !important;
+    }
+    .app-modal-actions {
+        flex-wrap: wrap !important;
+        justify-content: flex-end !important;
+        gap: 8px !important;
+    }
+    .soft-timer-banner {
+        left: 12px !important;
+        right: 12px !important;
+        bottom: 14px !important;
+        transform: none !important;
+        width: auto !important;
+        max-width: calc(100% - 24px) !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        padding: 12px !important;
+    }
+    .em-toast {
+        max-width: calc(100% - 28px) !important;
+        text-align: center !important;
     }
 }
