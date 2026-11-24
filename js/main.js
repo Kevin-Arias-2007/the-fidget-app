@@ -2585,3 +2585,24 @@
 
         enhanceKeyboardAccessibility();
         lucide.createIcons();
+
+        /* REINICIO AUTOMÁTICO DE SCROLL AL CAMBIAR DE VISTA O ABRIR UN FIDGET */
+function resetViewportScroll() {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    const sc = document.getElementById('app-content-scroll');
+    if (sc) sc.scrollTop = 0;
+    requestAnimationFrame(() => window.scrollTo(0, 0));
+}
+
+['hideMainViews', 'showWelcomeView', 'showLoginView', 'showAppTab', 'closeSpinnerView', 'closeFidgetView', 'openSosView', 'closeSosView'].forEach(fnName => {
+    if (typeof window[fnName] === 'function') {
+        const originalFn = window[fnName];
+        window[fnName] = function(...args) {
+            const res = originalFn.apply(this, args);
+            resetViewportScroll();
+            return res;
+        };
+    }
+});
