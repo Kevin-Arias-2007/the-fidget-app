@@ -2591,9 +2591,13 @@ function resetViewportScroll() {
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
+    document.querySelectorAll('.view').forEach(v => { v.scrollTop = 0; });
     const sc = document.getElementById('app-content-scroll');
     if (sc) sc.scrollTop = 0;
-    requestAnimationFrame(() => window.scrollTo(0, 0));
+    requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
+        document.querySelectorAll('.view').forEach(v => { v.scrollTop = 0; });
+    });
 }
 
 ['hideMainViews', 'showWelcomeView', 'showLoginView', 'showAppTab', 'closeSpinnerView', 'closeFidgetView', 'openSosView', 'closeSosView'].forEach(fnName => {
